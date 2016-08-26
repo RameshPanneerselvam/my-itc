@@ -1,0 +1,1 @@
+json.array! @customerbranches, partial: 'customerbranches/customerbranch', as: :customerbranch

@@ -1,0 +1,59 @@
+<div class="content-wrapper">
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>User name</th>
+      <th>Password</th>
+      <th>Usertype</th>
+      <th>Role</th>
+      <th>Land Line</th>
+      <th>Extension</th>
+      <th>Alternative_email</th>
+      <th>Mobile Number1</th>
+      <th>Mobile Number2</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.first_name %></td>
+        <td><%= user.last_name %></td>
+        <td><%= user.user_name %></td>
+        <td><%= user.password %></td>
+        <td><%= user.usertype %></td>
+        <td><%= user.role %></td>
+        <td><%= user.contact[0].landline %></td>
+        <td><%= user.contact[0].extension %></td>
+        <td><%= user.contact[0].alternative_email %></td>
+        <td><%= user.contact[0].mobilenumber1 %></td>
+        <td><%= user.contact[0].mobilenumber2 %></td>
+        <td><%= user.address[0].address1 %></td>
+        <td><%= user.address[0].address2 %></td>
+        <td><%= user.address[0].city %></td>
+        <td><%= user.address[0].state %></td>
+        <td><%= user.address[0].country %></td>
+        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User', new_user_path %>
+</div>

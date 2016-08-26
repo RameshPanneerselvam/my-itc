@@ -1,0 +1,219 @@
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin - Bootstrap Admin Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/assets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/assets/sb-admin.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="/assets/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <!--link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"-->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  
+
+        <!-- Navigation -->
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/users/user_dashboard">ITC-POD</a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu message-dropdown">
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-preview">
+                            <a href="#">
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading"><strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-footer">
+                            <a href="#">Read All New Messages</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu alert-dropdown">
+                        <li>
+                            <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
+                        </li>
+                        <li>
+                            <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">View All</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=current_user.first_name%> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <%= link_to "<i class='fa fa-fw fa-user'></i> Profile".html_safe, user_path(current_user)%>
+                            
+                        </li>
+                        <!--li>
+                            <-a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                        <-/li-->
+                        <%if Usertype.find_by(:id=>current_user.usertype).designation == "Head"%>
+                        <li>
+                            <%= link_to "<i class='fa fa-fw fa-gear'></i> Settings</a>".html_safe, pagemasters_pagesetting_page_path%>
+                        </li>
+                        <%end%>
+                        <li class="divider"></li>
+                        <li>
+                            <%=link_to "<i class='fa fa-fw fa-power-off'></i> Log Out".html_safe, log_out_path%>
+                            
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+
+
+
+
+
+
+
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="" data-toggle="modal" data-target=".bd-example-modal-lg">
+                          <img src="/assets/user1-128x128.jpg" class="img-circle" style="width: 25%; margin-left: 3%; margin-top: 3%;"> <strong style="color:white;"><%=current_user.first_name%><!--%= Role.find(current_user.role).role_name%--></strong>
+                          </a>
+                        
+                          <a href=""><strong><%=OfficeType.where(:id=>current_user.office_id).pluck(:type_name)[0]%>:<%=current_user.parent_code%></strong></a>
+
+                        <!--a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a-->
+                    </li>
+<%t=1%>
+                   <%@pages=Pagemaster.where(:id.in=>PageSetting.where(:user_id=>current_user.id).pluck(:page_id).flatten)%>
+                   <%@pages.where(:parent_id=>0).each do |p|%> 
+                    <li>
+                        <a href="#" data-toggle="collapse" data-target="#demo<%=t%>"><i class="<%=p.icons%>"></i> <%=p.page_name%><i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo<%=t%>" class="collapse">
+                           <%@pages.where(:parent_id=>p.id).each do |k|%>
+                            <li>
+                               <a href="<%=k.page_url%>"><i class="<%=k.icons%>"></i> <%=k.page_name%></a>
+                            </li>
+                           <%end%>
+                        </ul>
+                    </li>
+                    <%t=t+1%>
+                   <%end%>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+ <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel"><%=current_user.first_name%>  <%=current_user.last_name%></h4>
+      </div>
+      <div class="modal-body">
+        <%= Role.find(current_user.role).role_name%>
+      </div>
+      <div class="modal-footer">
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
+ </div> 
+ <script src="/assets/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/assets/bootstrap.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="/assets/raphael.min.js"></script>
+    <script src="/assets/morris.min.js"></script>
+    <script src="/assets/morris-data.js"></script>

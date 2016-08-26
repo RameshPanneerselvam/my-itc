@@ -1,0 +1,100 @@
+<div class="row">
+                 <div class="col-md-3"></div><div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+<strong>CUSTOMER EDIT FORM</strong>
+ </div>
+                        <div class="panel-body">
+
+<!--%= render 'form', customer: @customer %-->
+
+<%= form_for(@customer) do |f| %>
+  <% if @customer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+      <% @customer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :customer_name %>
+    <%= f.text_field :customer_name,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+
+    <%= f.label :customer_code %>
+    <%= f.text_field :customer_code ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :warehouse_id %>
+    <%= f.text_field :warehouse_id,:class=>"form-control" %>
+  </div>
+ <%= f.fields_for :contact_attributes do |ff| %>
+ 
+ <div class="form-group">
+    <%= ff.label :landline %>
+    <%= ff.text_field :landline, :value => @customer.contact[0].landline,:class=>"form-control"%>
+  </div>
+ 
+ 
+<div class="form-group">
+    <%= ff.label :extension %>
+    <%= ff.text_field :extension, :value => @customer.contact[0].extension,:class=>"form-control"%>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber1 %>
+    <%= ff.text_field :mobilenumber1, :value => @customer.contact[0].mobilenumber1,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber2  %>
+    <%= ff.text_field :mobilenumber2, :value => @customer.contact[0].mobilenumber2,:class=>"form-control"  %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :email %>
+    <%= ff.text_field :email, :value => @customer.contact[0].email ,:class=>"form-control"%>
+  </div>
+<% end %>
+
+<%= f.fields_for :address_attributes do |ff| %>
+  <div class="form-group">
+    <%= ff.label :address1 %>
+    <%= ff.text_field :address1, :value => @customer.address[0].address1,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :address2 %>
+    <%= ff.text_field :address2, :value => @customer.address[0].address2,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :city %>
+    <%= ff.text_field :city, :value => @customer.address[0].city,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :state %>
+    <%= ff.text_field :state, :value => @customer.address[0].state ,:class=>"form-control"%>
+  </div>
+  <div class="form-group">
+    <%= ff.label :country %>
+    <%= ff.text_field :country, :value => @customer.address[0].country,:class=>"form-control" %>
+  </div>
+<% end %>
+
+ 
+  <div class="form-group">
+     <%= f.submit 'edit',:class=>"btn btn-primary" %>
+  </div>
+<% end %>
+
+</div>
+</div>
+</div>
+</div>
+<%= link_to 'Show', @customer %> |
+<%= link_to 'Back', customers_path %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://lab.iamrohit.in/js/location.js"></script>

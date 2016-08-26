@@ -1,0 +1,55 @@
+
+<div class="content-wrapper">
+    <div class="content-wrapper">   
+        <strong> Document wise Allocation</strong>
+    </div>
+     <div class="panel-body">
+     	<div class="row">
+                    
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                        <div class="col-md-6"> <i class="fa fa-folder"> <%=Folder.where(:id=>$para_fmt).pluck(:folder_name)[0]%></i></div>  <strong> Document Count:</strong> <%=$tot_document%>    <strong>Allocated:</strong> <%=@doc_count%>   <strong>Remaining:</strong> <%=@remaining%>
+
+
+                        </div>
+   
+<table class="table">
+	<thead>
+		<th>User</th>
+		<th>Count</th>
+	</thead><tbody>
+<%if @us_id.present?%>
+
+<%@us_id=@us_id.uniq%>
+
+<%@us_id.map do |rr|%>
+<tr><td>
+<%= User.where(:id=>rr).pluck(:first_name)[0]%></td><td>
+<%= ProcessLog.where(:user_id=>rr).where(:activity_id=>$digitization_id).count%></td></tr><%end%>
+
+<%end%>
+<%unless @remaining==0%>
+<%= form_for Image.new,:url=>{:controller=>"images", :action=>"document_allocated_digitization",remote: true} do|p|%>
+          <tr><td>  <%= p.collection_select :id, @user, :id, :first_name ,{prompt: "Select User"},{class: "form-control"}%></td><td>
+          <%= text_field_tag :d_count, "", class: 'form-control' %>    </td><tr>
+             
+        <tr><td>
+          <%= p.submit "Add",:class=>"btn btn-primary"%></td>
+
+            <%end%><%end%>
+
+<td align="left">
+
+             <%= link_to "close",images_allocation_digitization_path(),:class=>"btn btn-danger"%></td></tr>
+          
+</tbody>
+</table>
+       </div>
+   </div>
+</div>
+
+
+
+
+       </div>
+   </div>

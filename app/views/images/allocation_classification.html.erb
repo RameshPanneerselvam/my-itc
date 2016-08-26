@@ -1,0 +1,78 @@
+
+                
+               <div class="content-wrapper">
+                        <div class="content-heading">
+                       <strong>Classification Allocation</strong>
+                        </div>
+                        <div class="panel-body">
+<% if flash[:notice] %>
+
+    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+<% end %>
+<div class="row">
+                
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                         Select Folders to Allocate
+                        </div>
+                        <div class="panel-body">
+<%=form_for @image,:url=>{:controller=>"images",:action=>"allocated_classification"} do |f|%>
+
+    <div class="row">
+                
+               <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                         List of  Folders to Allocate
+                        </div>
+                        <div class="panel-body">
+    <%@folder.each do |ii|%>
+<%@cou=Imagecurrentstatus.where(:folder_id=>ii.id).where(:image_status=>0).where(:allocation_status=>0).count%>
+<%unless @cou==0%>
+      <div class="col-md-3">  <%= check_box_tag 'group[]',ii.id%>
+
+        <i class="fa fa-folder"> <%=link_to ii.folder_name,images_allocation_classification_path(ii.id)%></i>(<%=@cou%>)</div>
+
+    <%end%><%end%>
+</div>
+</div>
+</div>
+
+
+    <div class="row"> 
+
+        <div class="col-sm-2"> 
+
+            <%= f.collection_select :id, @user, :id, :first_name ,{prompt: "Select User"},{class: "form-control",:required=>""}%>
+
+        </div>
+
+        <div class="col-sm-1"><button type="submit" class="btn btn-primary" >Allocate</button></div>
+
+</div>
+
+<%end%>
+</div>
+</div>
+</div>
+<!--%@n=ProcessLog.pluck(:process_specific_id)%-->
+<%if @img.present?%>
+<%@tt=@img#-@n%>
+<%unless @tt.blank?%>
+    <div class="row"> 
+<div class="panel panel-primary ">
+    <div class="panel-heading">
+                        List of images in selected folder
+                        </div>
+    <div class="panel-body">
+<%@tt.each do |j|%><%@imm=Image.find(:id=>j)%>
+
+    <div class="col-md-3"><%=image_tag @imm.image_path,:style=>"height:50px;width:50px;"%></div>
+
+<%end%>
+</div>
+</div>
+</div>
+<%end%><%end%>
+</div>
+</div>

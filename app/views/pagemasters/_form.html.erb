@@ -1,0 +1,42 @@
+<%= form_for(pagemaster) do |f| %>
+  <% if pagemaster.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(pagemaster.errors.count, "error") %> prohibited this pagemaster from being saved:</h2>
+
+      <ul>
+      <% pagemaster.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :page_name %>
+    <%= f.text_field :page_name %>
+  </div>
+  <div class="field">
+    <%= f.label :page_url %>
+    <%= f.text_field :page_url %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %>
+    <%= f.text_field :parent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :icons %>
+    <%= f.text_field :icons %>
+  </div>
+   <div class="field">
+    <%= f.label :parent_id %>
+    <%= f.collection_select(:parent_id, Pagemaster.where(:parent_id=>0), :id, :page_name) %>
+  </div>
+   <div class="field">
+    <%= f.label :office_id %>
+    <%= f.collection_select(:office_id, OfficeType.all, :id, :type_name) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Transporters</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Transporter name</th>
+      <th>Warehouse</th>
+      <th>Land Line</th>
+      <th>Extension</th>
+      <th>Alternative_email</th>
+      <th>Mobile Number1</th>
+      <th>Mobile Number2</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @transporters.each do |transporter| %>
+      <tr>
+        <td><%= transporter.transporter_name %></td>
+        <td><%= transporter.warehouse_id %></td>
+        <td><%= transporter.contact[0].landline %></td>
+        <td><%= transporter.contact[0].extension %></td>
+        <td><%= transporter.contact[0].alternative_email %></td>
+        <td><%= transporter.contact[0].mobilenumber1 %></td>
+        <td><%= transporter.contact[0].mobilenumber2 %></td>
+        <td><%= transporter.address[0].address1 %></td>
+        <td><%= transporter.address[0].address2 %></td>
+        <td><%= transporter.address[0].city %></td>
+        <td><%= transporter.address[0].state %></td>
+        <td><%= transporter.address[0].country %></td>
+        <td><%= link_to 'Show', transporter %></td>
+        <td><%= link_to 'Edit', edit_transporter_path(transporter) %></td>
+        <td><%= link_to 'Destroy', transporter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Transporter', new_transporter_path %>

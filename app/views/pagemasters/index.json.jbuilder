@@ -1,0 +1,1 @@
+json.array! @pagemasters, partial: 'pagemasters/pagemaster', as: :pagemaster

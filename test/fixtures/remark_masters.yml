@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  remark_name: MyString
+  remark_description: MyString
+  isactive: MyString
+
+two:
+  remark_name: MyString
+  remark_description: MyString
+  isactive: MyString

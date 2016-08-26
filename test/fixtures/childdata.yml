@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  field_name: MyString
+  field_value: MyString
+  datacapture_id: MyString
+  isactive: MyString
+
+two:
+  field_name: MyString
+  field_value: MyString
+  datacapture_id: MyString
+  isactive: MyString

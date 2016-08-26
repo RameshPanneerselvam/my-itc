@@ -1,0 +1,1 @@
+json.partial! "pagemasters/pagemaster", pagemaster: @pagemaster

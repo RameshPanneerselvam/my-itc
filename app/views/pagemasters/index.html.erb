@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pagemasters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Page Name</th>
+      <th>Page URL</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pagemasters.each do |pagemaster| %>
+      <tr>
+        <td><%= pagemaster.page_name %></td>
+        <td><%= link_to pagemaster.page_url,pagemaster.page_url %></td>
+        <td><%= link_to 'Show', pagemaster%></td>
+        <td><%= link_to 'Edit', edit_pagemaster_path(pagemaster) %></td>
+        <td><%= link_to 'Destroy', pagemaster, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pagemaster', new_pagemaster_path %>

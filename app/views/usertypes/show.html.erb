@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type name:</strong>
+  <%= @usertype.type_name %>
+</p>
+
+<p>
+  <strong>Office:</strong>
+  <%= @usertype.office_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @usertype.description %>
+</p>
+
+<p>
+  <strong>Isactive:</strong>
+  <%= @usertype.isactive %>
+</p>
+
+<%= link_to 'Edit', edit_usertype_path(@usertype) %> |
+<%= link_to 'Back', usertypes_path %>

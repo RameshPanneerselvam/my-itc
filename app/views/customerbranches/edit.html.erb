@@ -1,0 +1,105 @@
+<div class="row">
+                <div class="col-md-3"></div> <div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                        <strong>CUSTOMER BRANCH EDIT FORM</strong>
+                        </div>
+                        <div class="panel-body">
+<%= form_for(@customerbranch) do |f| %>
+  <% if @customerbranch.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@customerbranch.errors.count, "error") %> prohibited this customerbranch from being saved:</h2>
+
+      <ul>
+      <% @customerbranch.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :customer_name %>
+    <%= f.text_field :customer_name,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+
+    <%= f.label :customerbranch_code %>
+    <%= f.text_field :customerbranch_code ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+ <div style="display:none">
+    <%= f.text_field :customer_id,:class=>"form-control" %>
+    <%= f.text_field :customer_code,:class=>"form-control" %>
+  </div>
+ <%= f.fields_for :contact_attributes do |ff| %>
+  <div class="form-group">
+    <%= ff.label :landline %>
+    <%= ff.text_field :landline, :value => @customerbranch.contact[0].landline,:class=>"form-control"%>
+  </div>
+ 
+ 
+  <div class="form-group">
+    <%= ff.label :extension %>
+    <%= ff.text_field :extension, :value => @customerbranch.contact[0].extension,:class=>"form-control"%>
+  </div>
+ <div class="form-group">
+    <%= ff.label :mobilenumber1 %>
+    <%= ff.text_field :mobilenumber1, :value => @customerbranch.contact[0].mobilenumber1,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber2  %>
+    <%= ff.text_field :mobilenumber2, :value => @customerbranch.contact[0].mobilenumber2,:class=>"form-control"  %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :email %>
+    <%= ff.text_field :email, :value => @customerbranch.contact[0].email,:class=>"form-control" %>
+  </div>
+<% end %>
+
+<%= f.fields_for :address_attributes do |ff| %>
+ <div class="form-group">
+    <%= ff.label :address1 %>
+    <%= ff.text_field :address1, :value => @customerbranch.address[0].address1,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :address2 %>
+    <%= ff.text_field :address2, :value => @customerbranch.address[0].address2,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :country %>
+  <select name="customerbranch[address_attributes[country]]" class="countries form-control" id="countryId">
+<option value="">Select Country</option>
+</select>
+  </div>
+ <div class="form-group">
+    <%= ff.label :state %>
+    <select name="customerbranch[address_attributes[state]]" class="states form-control" id="stateId">
+<option value="">Select State</option>
+</select>
+  </div>
+<div class="form-group">
+    <%= ff.label :city %>
+<select name="customerbranch[address_attributes[city]]" class="cities form-control" id="cityId">
+<option value="">Select City</option>
+</select>
+  </div>
+<% end %>
+
+ 
+ <div class="form-group">
+    <%= f.submit 'edit',:class=>"btn btn-primary" %>
+  </div>
+<% end %>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<%= link_to 'Show', @customerbranch %> |
+<%= link_to 'Back', customerbranches_path %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://lab.iamrohit.in/js/location.js"></script>
+

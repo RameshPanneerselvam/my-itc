@@ -1,0 +1,12 @@
+
+
+  <% if flash[:notice] %>
+
+    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+  <% end %>
+<%=link_to "Upload Image",images_image_browse_path%><br>
+<%=link_to "Create field",images_attribute_creation_path%><br>
+<%=link_to "classificate image",images_image_classification_path%>
+<%=link_to "Create classification",images_classification_creation_path%>
+

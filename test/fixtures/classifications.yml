@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  classification_name: MyString
+  classification_description: MyString
+  isactive: MyString
+
+two:
+  classification_name: MyString
+  classification_description: MyString
+  isactive: MyString

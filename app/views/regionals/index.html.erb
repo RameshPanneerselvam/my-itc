@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Regionals</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Regional name</th>
+      <th>Land Line</th>
+      <th>Extension</th>
+      <th>Alternative_email</th>
+      <th>Mobile Number1</th>
+      <th>Mobile Number2</th>
+      <th>Address1</th>
+      <th>Address2</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @regionals.each do |regional| %>
+      <tr>
+        <td><%= regional.regional_name %></td>
+        <td><%= regional.contact[0].landline %></td>
+        <td><%= regional.contact[0].extension %></td>
+        <td><%= regional.contact[0].alternative_email %></td>
+        <td><%= regional.contact[0].mobilenumber1 %></td>
+        <td><%= regional.contact[0].mobilenumber2 %></td>
+        <td><%= regional.address[0].address1 %></td>
+        <td><%= regional.address[0].address2 %></td>
+        <td><%= regional.address[0].city %></td>
+        <td><%= regional.address[0].state %></td>
+        <td><%= regional.address[0].country %></td>
+        <td><%= link_to 'Show', regional %></td>
+        <td><%= link_to 'Edit', edit_regional_path(regional) %></td>
+        <td><%= link_to 'Destroy', regional, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Regional', new_regional_path %>

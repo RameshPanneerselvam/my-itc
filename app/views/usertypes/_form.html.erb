@@ -1,0 +1,40 @@
+<%= form_for(usertype) do |f| %>
+  <% if usertype.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(usertype.errors.count, "error") %> prohibited this usertype from being saved:</h2>
+
+      <ul>
+      <% usertype.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :type_name %>
+    <%= f.text_field :type_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :office_id %>
+    <%= f.collection_select(:office_id, OfficeType.all, :id, :type_name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :designation %>
+    <%= f.text_field :designation %>
+  </div>
+  <div class="field">
+    <%= f.label :isactive %>
+    <%= f.text_field :isactive %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,245 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+                 <div class="col-md-3"></div><div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                         <strong><%= "#{ @transporter.transporter_name }".upcase%></strong> TRANSPORTER DETAILS
+                        </div>
+                        <div class="panel-body">
+ <div class="form-group col-md-12">
+<div class="col-md-6">
+
+  <strong>Transporter name:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @transporter.transporter_name %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Warehouse:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @transporter.warehouse_id %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Land Line:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.contact[0].landline %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Extension:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.contact[0].extension %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Email:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.contact[0].email %>
+</div>
+</div><div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Alternative Email:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.contact[0].alternative_email %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Mobile number 1:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.contact[0].mobilenumber1 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Mobile number 2:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @transporter.contact[0].mobilenumber2 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Address 1:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @transporter.address[0].address1 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Address 2:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.address[0].address2 %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>City:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.address[0].city %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>State:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.address[0].state %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Country:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @transporter.address[0].country %>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+
+<%= link_to 'Edit', edit_transporter_path(@transporter) %> |
+<%= link_to 'Back', transporters_path %>
+
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+  Create Transporter Head
+</button>
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          New User Creation
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                           </div>
+                        <div class="panel-body">
+                          <%= form_for(@user) do |f| %>
+
+  <div class="field">
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name,:class=>"form-control", :required=>"true" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_name %>
+    <%= f.text_field :user_name ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password ,:class=>"form-control", :required=>"true"%>
+  </div>
+  <div style="display:none;">
+    <%= f.text_field :parent_id ,:value => @transporter.id%>
+    <%= f.text_field :parent_code ,:value => @transporter.transporter_code%>
+    <%= f.text_field :office_id ,:value => @transporter.office_id%>
+  </div>
+  <div class="field">
+    <%= f.label :usertype %>
+    <%= f.collection_select(:usertype,  Usertype.not.where(:id=>current_user.usertype).where(:office_id=>@transporter.office_id), :id, :type_name,{},{class: "form-control"})%>
+  </div>
+
+  <div class="field">
+    <%= f.label :role %>
+    <%= f.collection_select(:role, Role.all, :id, :role_name,{},{class: "form-control"})%>
+  </div>
+  <%= f.fields_for :contact_attributes do |ff| %>
+<div class="form-group">
+    <%= ff.label :landline %>
+    <%= ff.text_field :landline ,:class=>"form-control"%>
+  </div>
+ 
+ 
+ <div class="form-group">
+    <%= ff.label :extension %>
+    <%= ff.text_field :extension,:class=>"form-control", :required=>"true"%>
+  </div>
+ <div class="form-group">
+    <%= ff.label :mobilenumber1 %>
+    <%= ff.text_field :mobilenumber1,:class=>"form-control", :required=>"true" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber2  %>
+    <%= ff.text_field :mobilenumber2 ,:class=>"form-control", :required=>"true" %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :email %>
+    <%= ff.text_field :email,:class=>"form-control", :required=>"true" %>
+  </div>
+<% end %>
+
+<%= f.fields_for :address_attributes do |ff| %>
+  <div class="form-group">
+    <%= ff.label :address1 %>
+    <%= ff.text_field :address1 ,:class=>"form-control", :required=>"true"%>
+  </div>
+  <div class="form-group">
+    <%= ff.label :address2 %>
+    <%= ff.text_field :address2,:class=>"form-control", :required=>"true" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :country %>
+  <select name="user[address_attributes[country]]" class="countries form-control" id="countryId">
+<option value="">Select Country</option>
+</select>
+  </div>
+ <div class="form-group">
+    <%= ff.label :state %>
+    <select name="user[address_attributes[state]]" class="states form-control" id="stateId">
+<option value="">Select State</option>
+</select>
+  </div>
+<div class="form-group">
+    <%= ff.label :city %>
+<select name="user[address_attributes[city]]" class="cities form-control" id="cityId">
+<option value="">Select City</option>
+</select>
+  </div>
+<% end %>
+<div class="modal-footer">
+  <div class="actions">
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    <!--%= f.submit %-->
+  </div>
+      </div>
+<% end %>
+</div>
+      </div>
+    </div>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://lab.iamrohit.in/js/location.js"></script>
+
+</div>

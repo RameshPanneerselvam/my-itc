@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  activity_name: MyString
+  activity_description: MyString
+  processmaster_id: MyString
+  isactive: MyString
+
+two:
+  activity_name: MyString
+  activity_description: MyString
+  processmaster_id: MyString
+  isactive: MyString

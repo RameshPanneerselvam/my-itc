@@ -1,0 +1,174 @@
+<div class="content-wrapper">
+
+  <div class="content-heading">
+
+    <center><strong>User Dashboard</strong></center>
+                        
+  </div>
+  
+  <div class="panel-body">
+  
+    <%if current_user.office_id ==7%>
+  
+      <div class="panel panel-primary">
+  
+        <div class="panel-heading">Task in Hand</div>
+                        
+          <div class="panel-body">
+
+            <strong>Classification</strong>
+
+            <%if @v3.present?%>
+    
+              <%@gr_id1=[]%>
+  
+                <%@v3.map do |j|%>
+  
+                  <%@v4= Folder.where(:id=>j).pluck(:folder_name)[0]%>
+  
+                  <div class="col-md-12">
+
+                    <div class="col-md-6"><i class="fa fa-folder"> <%=link_to @v4,images_image_classification_path(j)%></i></div>
+  
+                    <%@gr_id1 << Imagecurrentstatus.where(:folder_id=>j).where(:image_status=>0).where(:allocation_status=>1).pluck(:image_id)%>
+   
+                    <%@idd1=[]%>
+  
+                    <%@gr_id1=@gr_id1.flatten%>
+  
+                    <%@gr_id1.map do |m|%>
+  
+                      <%@idd1 << ProcessLog.where(:process_specific_id=>m).where(:activity_id=>1).where(:status=>nil).where(:user_id=>$user_id).pluck(:id)[0]%>
+  
+                    <%end%>
+  
+                    <%@idd1=@idd1.compact%>
+  
+                    <%@idd2=@idd1*1%>
+   
+                    <%@gr_id1.clear%>
+    
+                    <%@idd1.clear%>
+  
+                    <div class="col-md-6"><%=@idd2.count%></div>
+                  
+                  </div>
+  <%end%>
+  
+  <%end%>
+  <br><br><br>
+  <strong>Digitization</strong>
+   <%if @c3.present?%>
+   <%@gr_id=[]%>
+   <%@c3.map do |j|%>
+  <%@c4= Folder.where(:id=>j).pluck(:folder_name)[0]%>
+  <div class="col-md-12"><div class="col-md-6"><i class="fa fa-folder"> <%=link_to @c4,images_digitization_path(j)%></i></div>
+  <%@gr_id << Imagecurrentstatus.where(:folder_id=>j).where(:image_status=>1).where(:allocation_status=>1).pluck(:group_id)%>
+   <%@gr_id=@gr_id.flatten%>
+  <%@gr_id=@gr_id.uniq%>
+
+   <%@idd=[]%>
+    <%@idd.clear%>
+  <%@gr_id.map do |mm|%>
+  <%@idd << ProcessLog.where(:process_specific_id=>mm).where(:activity_id=>2).where(:status=>nil).where(:user_id=>$user_id).pluck(:id)[0]%>
+  <%end%>
+  <%@gr_id.clear%>
+  <%@idd=@idd.compact%><div class="col-md-6"><%=@idd.count%></div></div>
+  <%end%><%end%>
+   </div>
+   
+                    </div>
+
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                         Select Date to view the User Production Report
+                        </div>
+                        <div class="panel-body">
+
+<%=form_for @user, :url=>{:controller=>"users",:action=>"user_report"} do |i|%>
+
+
+
+ <div class="form-group">
+<%=i.label :from%><div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" name="from" class="form-control pull-right" id="txtFrom">
+                </div>
+</div>
+ <div class="form-group">
+<%=i.label :To%><div class="input-group date">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" name="to" class="form-control pull-right" id="txtTo">
+                </div>
+</div>
+<%= i.submit "click",:class=>"btn btn-primary"%>
+<%end%>
+</div></div>
+
+ 
+
+
+<% unless $ff_id.nil?%>
+    <div class="panel panel-primary">
+                            <div class="panel-heading"> Task Completed  </div>
+                       
+
+  <div class="panel-body">
+
+
+
+<div class="col-md-12"><div class="col-md-6"><strong >From</strong> <%=$from%></div><div class="col-md-6"><strong>To <%=$to%></strong></div></div>
+<br>
+<strong>Classification</strong>
+<%$ff_id.map do |k|%>
+<div class="col-md-12"><div class="col-md-6"><i class="fa fa-folder"> <%=Folder.where(:id=>k).pluck(:folder_name)[0]%></i></div>
+<%@ima_id=Imagecurrentstatus.where(:folder_id=>k).pluck(:image_id)%>
+<%@n=[]%>
+<%@ima_id.map do |l|%>
+<% @n << ProcessLog.where(:process_specific_id=>l).where(:activity_id=>1).where(:status=>0).where(:user_id=>$user_id).pluck(:id)[0]%>
+<%end%><%@n=@n.compact%><div class="col-md-6"><%=@n.count%></div></div>
+  
+<%end%><%end%>
+<br><br><br>
+<% unless $ff1_id.nil?%><%if $ff_id.nil?%>
+FROM:<%=$from%><br>TO<%=$to%><%end%><br>
+<strong>Digitization</strong>
+<%$ff1_id.map do |kk|%>
+<div class="col-md-12"><div class="col-md-6"><i class="fa fa-folder"> <%=Folder.where(:id=>kk).pluck(:folder_name)[0]%></i></div>
+<%@ima_id1=Imagecurrentstatus.where(:folder_id=>kk).pluck(:group_id)%>
+<%@nn=[]%>
+<%@ima_id1=@ima_id1.uniq%>
+<%@ima_id1.map do |ll|%>
+<% @nn<<ProcessLog.where(:process_specific_id=>ll).where(:activity_id=>$digitization_id).where(:status=>1).where(:user_id=>$user_id).pluck(:id)[0]%>
+<%end%><%@nn=@nn.compact%><div class="col-md-6"><%=@nn.count%></div></div>
+  
+<%end%>
+</div>
+         
+                        </div>
+
+<%end%>
+<%$ff_id=nil%><%$ff1_id=nil%><%$from=nil%><%$to=nil%>
+                    </div>
+                    <%end%>
+                  </div></div>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"
+            type="text/javascript"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css"
+          rel="Stylesheet" type="text/css" />
+    <script type="text/javascript">
+        $(function(){
+        $("#txtTo").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtFrom").datepicker({ dateFormat: 'yy-mm-dd' }).bind("change",function(){
+            var minValue = $(this).val();
+            minValue = $.datepicker.parseDate("yy-mm-dd", minValue);
+            minValue.setDate(minValue.getDate()+1);
+            $("#txtTo").datepicker( "option", "minDate", minValue );
+        })
+    });
+    </script>

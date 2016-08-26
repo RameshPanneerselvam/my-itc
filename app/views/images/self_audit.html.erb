@@ -1,0 +1,60 @@
+<html>
+<head>
+<script> function goBack() { window.history.back(); } </script>
+</head>
+<body>
+<button onclick="goBack()" class="btn btn-info"><span class="glyphicon glyphicon-hand-left"></span>&nbsp;Go Back</button>
+
+
+  <% if flash[:notice] %>
+
+    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+  <% end %>
+
+    <%if @headers != nil%>
+<table>
+  <tr style="background:black; color:white;">
+
+          <%@headers.map do |header|%>
+
+                 
+            <%$head << [FieldMaster.where(:id=>header.field_id).to_a[0].field_name,header.field_type]%> 
+
+            <td style="text-align: center;">
+
+              <%=FieldMaster.where(:id=>header.field_id).to_a[0].field_name%>
+
+            </td>
+
+          <%end%>
+
+        </tr>
+
+        <%= form_for  @datacapture,:url=>{:controller=>"images",:action=>"update_classification"} do |f| %>
+
+         <%@old_data.pluck(:group_id).uniq.map do |p|%>
+          
+          <tr>        
+  
+            <%@old_data.where(:group_id=>p).each do |field| %>
+  
+              <td style="text-align: center;"><%= text_field_tag 'values[]',field.field_value%></td>
+
+  
+            <%end%>
+                
+          </tr>     
+          
+        <%end%>
+<%=f.submit "Update All"%>
+        <%end%>
+        </table>
+
+<%end%>
+
+
+
+</body>
+
+</html>

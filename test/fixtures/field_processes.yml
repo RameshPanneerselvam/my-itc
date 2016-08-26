@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  field_type: MyString
+  field_id: MyString
+  classification_id: MyString
+  tree_status: MyString
+  subchild_flag: MyString
+  isactive: MyString
+
+two:
+  field_type: MyString
+  field_id: MyString
+  classification_id: MyString
+  tree_status: MyString
+  subchild_flag: MyString
+  isactive: MyString

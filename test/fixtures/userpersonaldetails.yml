@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dob: MyString
+  gender: MyString
+  user_id: MyString
+  bloodgroup: MyString
+  isactive: MyString
+
+two:
+  dob: MyString
+  gender: MyString
+  user_id: MyString
+  bloodgroup: MyString
+  isactive: MyString

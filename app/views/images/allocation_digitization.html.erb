@@ -1,0 +1,59 @@
+<div class="content-wrapper">
+    <div class="content-wrapper">   
+        <strong> Digitization Allocation</strong>
+    </div>
+     <div class="panel-body">
+<% if flash[:notice] %>
+
+    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+<% end %>
+<div class="row">
+                    
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                         Select Folder or Click Folder to Allocate
+                        </div>
+                        <div class="panel-body">
+
+<%=form_for @image,:url=>{:controller=>"images",:action=>"allocated_digitization"} do |f|%>
+<div class="row">
+                    
+               <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                        List of Folders
+                        </div>
+                        <div class="panel-body">
+    <%@fold.each do |ii|%>
+
+        
+        <div class="col-md-3"><%= check_box_tag 'group[]',ii%>
+
+        <%@count=Imagecurrentstatus.where(:folder_id=>ii).where(:image_status=>1).where(:allocation_status=>0).pluck(:group_id).uniq%>
+
+        <%@allo= Folder.where(:id=>ii).pluck(:folder_name)[0]%>
+<i class="fa fa-folder"> <%=link_to @allo,images_document_allocate_digitization_path(ii)%>(<%=@count.count%>)</i></div>
+
+    <%end%>
+</div>
+</div>
+</div>
+
+     <div class="row"> 
+
+        <div class="col-sm-2">
+
+            <%= f.collection_select :id, @user, :id, :first_name ,{prompt: "Select User"},{class: "form-control",:required=>""}%>
+
+        </div>
+
+        <div class="col-sm-1"><button type="submit" class="btn btn-primary" >Allocate</button></div>
+
+    </div>
+    
+<%end%>
+</div>
+</div>
+</div>
+</div>
+</div>

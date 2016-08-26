@@ -1,0 +1,42 @@
+<div class="content-wrapper">
+                        <div class="content-heading">
+                       <strong>Exception Details</strong>
+                        </div>
+                        <div class="panel-body">
+              <table class="table">
+                <thead>
+                <th>S.No</th>
+                <th>Warehouse Name</th>
+                <th>Issue Date</th>
+                <th>Remark</th>
+                <th>Description</th>
+                <th>Image Path</th>
+                <th>Folder Name</th>
+                <th>Uploaded Date</th>
+                <th>Uploaded By</th>
+              </thead>
+              <tbody>
+                <%t=1%>
+              <%@exception.each do |ff|%>
+              <tr>
+                <td><%="#{t}"%></td>
+                <td><%=ff[0]%></td>
+                <td><%=ff[1]%></td>
+                <td><%=ff[2]%></td>
+                <td><%=ff[3]%></td>
+                <td><%=ff[4].image_path%></td>
+                <td><%=ff[5]%></td>
+                <td><%=ff[6]%></td>
+                <td><%=ff[7]%></td>
+              </tr>
+              <%t=t+1%>
+              <%end%>
+              </tbody>
+         </table>
+  
+                </div>
+              </div>
+
+             
+
+

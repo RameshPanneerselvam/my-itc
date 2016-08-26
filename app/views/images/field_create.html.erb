@@ -1,0 +1,42 @@
+
+
+  <% if flash[:notice] %>
+
+    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+  <% end %>
+
+<%= form_for FieldMaster.new,:url=>{:controller=>"images", :action=>"field_create"} do|i|%>
+ 
+   
+        <%= i.select "id",options_from_collection_for_select(Classification.order("classification_name ASC"), "id", "classification_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"true"%></td>
+
+<%end%>
+
+   <table> 
+
+        <tr>
+    
+            <th>Select Item</th>
+      
+            <th>Field Name</th>
+      
+            <th>Field Type</th>
+      
+        </tr>
+
+            <% FieldMaster.order("field_name ASC").each do |p| %>
+              
+                <tr>
+
+                    <td><%= check_box_tag 'field_name[]', p.id %></td>
+
+                    <td><%= p.field_name %></td>
+
+                    <td><%= select "p",options_for_select(["Text","Date","Droupdown"]),{:prompt=>"--Select--",:required=>'true'}%>
+
+                    </td>
+
+            <%end%>
+
+    </table>  

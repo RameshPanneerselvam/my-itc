@@ -1,0 +1,177 @@
+
+<p id="notice"><%= notice %></p>
+<div class="row">
+                 <div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          <strong><%= "#{ @user.user_name }".upcase%></strong> USER DETAILS
+                        </div>
+                        <div class="panel-body">
+ <div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>First name:</strong>
+</div>
+<div class="col-md-6">
+  <%= @user.first_name %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Last name:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @user.last_name %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>User name:</strong>
+    </div>
+<div class="col-md-6">
+  <%= @user.user_name %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+
+  <strong>Password:</strong>
+    </div>
+<div class="col-md-6">
+  <%= @user.password %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+ <strong>Usertype:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @user.usertype %>
+</div>
+</div>
+
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>Role:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @user.role %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>Land Line:</strong>
+    </div>
+<div class="col-md-6">
+  <%=  @user.contact[0].landline %>
+</div>
+</div>
+
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>Extension:</strong>
+    </div>
+<div class="col-md-6">
+  <%= @user.contact[0].extension %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>Email:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @user.contact[0].email %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>Alternative Email:</strong>
+    </div>
+<div class="col-md-6">
+  <%= @user.contact[0].alternative_email %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>Mobile number 1:</strong>
+    </div>
+<div class="col-md-6">
+  <%=  @user.contact[0].mobilenumber1 %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>Mobile number 2:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @user.contact[0].mobilenumber2 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>Address 1:</strong>
+   </div>
+<div class="col-md-6">
+  <%=@user.address[0].address1 %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>Address 2:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @user.address[0].address2 %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>City:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @user.address[0].city %>
+</div>
+</div>
+
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+
+  <strong>State:</strong>
+   </div>
+<div class="col-md-6">
+  <%=  @user.address[0].state %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6"> 
+  <strong>Country:</strong>
+   </div>
+<div class="col-md-6">
+  <%= @user.address[0].country %>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="form-group col-md-12">
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%if @user != current_user%>
+<%= link_to 'Back', users_path %>
+<%else%>
+<%end%>
+</div>

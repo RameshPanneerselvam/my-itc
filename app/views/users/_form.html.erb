@@ -1,0 +1,116 @@
+<div class="row">
+                <div class="col-md-3"></div> <div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          New User Creation
+                           </div>
+                        <div class="panel-body"><%= form_for(user) do |f| %>
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name,:class=>"form-control", :required=>"true" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_name %>
+    <%= f.text_field :user_name ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password ,:class=>"form-control", :required=>"true"%>
+  </div>
+  <div style="display:none;">
+    <%= f.text_field :parent_id ,:value => current_user.parent_id%>
+    <%= f.text_field :parent_code ,:value => current_user.parent_code%>
+    <%= f.text_field :office_id ,:value => current_user.office_id%>
+  </div>
+  <div class="field">
+    <%= f.label :usertype %>
+    <%= f.collection_select(:usertype, Usertype.not.where(:id=>current_user.usertype).where(:office_id=>current_user.office_id), :id, :type_name,{},{class: "form-control"})%>
+  </div>
+
+  <div class="field">
+    <%= f.label :role %>
+    <%= f.collection_select(:role, Role.all, :id, :role_name,{},{class: "form-control"})%>
+  </div>
+  <%= f.fields_for :contact_attributes do |ff| %>
+<div class="form-group">
+    <%= ff.label :landline %>
+    <%= ff.text_field :landline ,:class=>"form-control"%>
+  </div>
+ 
+ 
+ <div class="form-group">
+    <%= ff.label :extension %>
+    <%= ff.text_field :extension,:class=>"form-control", :required=>"true"%>
+  </div>
+ <div class="form-group">
+    <%= ff.label :mobilenumber1 %>
+    <%= ff.text_field :mobilenumber1,:class=>"form-control", :required=>"true" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber2  %>
+    <%= ff.text_field :mobilenumber2 ,:class=>"form-control", :required=>"true" %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :email %>
+    <%= ff.text_field :email,:class=>"form-control", :required=>"true" %>
+  </div>
+<% end %>
+
+<%= f.fields_for :address_attributes do |ff| %>
+  <div class="form-group">
+    <%= ff.label :address1 %>
+    <%= ff.text_field :address1 ,:class=>"form-control", :required=>"true"%>
+  </div>
+  <div class="form-group">
+    <%= ff.label :address2 %>
+    <%= ff.text_field :address2,:class=>"form-control", :required=>"true" %>
+  </div>
+  <div class="form-group">
+    <%= ff.label :country %>
+  <select name="user[address_attributes[country]]" class="countries form-control" id="countryId">
+<option value="">Select Country</option>
+</select>
+  </div>
+ <div class="form-group">
+    <%= ff.label :state %>
+    <select name="user[address_attributes[state]]" class="states form-control" id="stateId">
+<option value="">Select State</option>
+</select>
+  </div>
+<div class="form-group">
+    <%= ff.label :city %>
+<select name="user[address_attributes[city]]" class="cities form-control" id="cityId">
+<option value="">Select City</option>
+</select>
+  </div>
+<% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://lab.iamrohit.in/js/location.js"></script>
+

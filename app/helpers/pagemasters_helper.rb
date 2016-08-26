@@ -1,0 +1,2 @@
+module PagemastersHelper
+end

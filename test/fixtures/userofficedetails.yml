@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type_id: MyString
+  code: MyString
+  isactive: MyString
+
+two:
+  type_id: MyString
+  code: MyString
+  isactive: MyString

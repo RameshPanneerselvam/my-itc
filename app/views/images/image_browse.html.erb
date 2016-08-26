@@ -1,0 +1,158 @@
+<div class="content-wrapper">   
+
+  <strong> Image Upload</strong>
+
+</div>
+
+<div class="panel-body">
+
+  <div class="row">
+ 
+    <div style="width: 125%;" class="panel panel-primary">
+ 
+      <div class="panel-heading">
+ 
+        <center><strong>Select folder or create new folder to upload</strong></center>
+ 
+      </div>
+      
+      <div class="panel-body">
+
+        <div class="col-md-12">
+
+            <%@all_folder.map do |k|%>
+
+            <div class="col-md-4">
+  
+              <i class="fa fa-folder fa-1x" aria-hidden="true"></i>&nbsp;<%=link_to k.folder_name,images_image_browse_path(k)%>
+
+            </div>  
+
+            <%end%>
+
+            <%if @show_upload==1%>
+  
+              <a class="btn btn-success" data-toggle="modal" data-target="#applyModal1"><i class="fa fa-arrow-up" aria-hidden="true"></i> Upload Image</a>
+  
+            <%end%>
+
+            <div class="modal fade" id="applyModal1" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog_2">
+   
+                <div class="modal-content" style="margin-top: 180px;">
+      
+                  <div class="modal-header">
+      
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+      
+                    <h4 class="modal-title" id="myModalLabel">
+
+                      <div class="head_4">
+      
+                        <div style="font-size: 100%; font-family: times;">Upload Image</div>
+      
+                      </div>
+      
+                    </h4>
+     
+                  </div>
+
+                  <div class="modal-body">
+      
+                    <%= form_for Image.new, :url=>{:controller=>"images", :action=>"save_image",:id=>params[:format]} do|i|%>
+
+                      <div class="section">
+      
+                        <%= i.label :image_path, "Select Image",:style=>"font-family: t;"%>
+      
+                        <%= i.file_field :image_path,multiple:true,:class=>"btn btn-success",:id=>"input"%>
+      
+                      </div>
+
+                      <div class="section" align="center">
+       
+                        <!--%= i.submit "Upload",:class=>"btn btn-success"%-->
+
+                        <%= button_tag(type: "submit", :class=> "btn btn-sucess", :required=>"true") do %><i class="fa fa-cloud-upload"></i> Upload<% end %>
+      
+                      </div>
+       
+                    <%end%>
+      
+                  </div>
+      
+                </div>
+      
+              </div>
+    
+            </div><br>
+
+            <%unless @show_upload == 1%>
+  
+              <a class="btn btn-success" data-toggle="modal" data-target="#applyModal2"><i class="fa fa-plus"></i> Folder</a>
+     
+            <%end%>
+  
+            <div class="modal fade" id="applyModal2" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog_2">
+    
+                <div class="modal-content" style="margin-top: 180px;">
+   
+                  <div class="modal-header">
+      
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+      
+                    <h4 class="modal-title" id="myModalLabel">
+      
+                      <div class="head_4">
+      
+                        <div style="font-size: 100%; font-family: times;">Create New Folder</div>
+      
+                      </div>
+             
+                    </h4>
+      
+                  </div>
+
+                  <div class="modal-body">
+      
+                    <%= form_for Folder.new,:url=>{:controller=>"images",:action=>"create_folder"} do |i|%>
+      
+                      <div class="section">
+      
+                        <%= i.label :folder_name,:style=>"font-family: t;"%>
+      
+                        <%= i.text_field :folder_name,:value => "New Folder",:class=>"form-control",:autofocuse=>true ,:required=>true%>
+      
+                      </div>
+      
+                      <div class="section" align="center">
+      
+                        <%= i.submit "Save" ,:class=>"btn btn-info"%>
+      
+                      </div>
+      
+                    <%end%>
+      
+                  </div>
+      
+                </div>
+      
+              </div>
+
+            </div>   
+  
+                
+
+        </div>
+     
+      </div>
+     
+    </div>      
+  
+  </div>   
+
+</div> 
+

@@ -1,0 +1,112 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+                <div class="col-md-3"></div> <div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          <strong><%= "#{@regional.regional_name}".upcase%></strong> REGIONAL DETAILS
+                        </div>
+                        <div class="panel-body">
+ 
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Regional name:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.regional_name %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Land Line:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].landline %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Extension:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].extension %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Email:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].email %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Alternative Email:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].alternative_email %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Mobile number 1:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].mobilenumber1 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Mobile number 2:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.contact[0].mobilenumber2 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Address 1:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.address[0].address1 %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Address 2:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.address[0].address2 %>
+</div>
+</div></p>
+
+<div class="form-group col-md-12">
+<div class="col-md-6">
+
+  <strong>City:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.address[0].city %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>State:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.address[0].state %>
+</div>
+</div>
+<div class="form-group col-md-12">
+<div class="col-md-6">
+  <strong>Country:</strong>
+  </div>
+<div class="col-md-6">
+  <%= @regional.address[0].country %>
+</div>
+</div>
+</div>
+</div>
+</div>
+<%= link_to 'Edit', edit_regional_path(@regional) %> |
+<%= link_to 'Back', regionals_path %>

@@ -1,0 +1,13 @@
+<fieldset>
+	<%value=params[:action]%>
+	<% if value == "keying_allocation"%>
+    <%= f.collection_select(:id, User.all, :id, :username) %>
+	<%= f.text_field :allocation_count,:required => true, type: "number", min: "1" %>
+	<%= link_to "Remove", '#',class: "remove_fields" %>
+	<%else%>
+	<%= f.text_field :field_name ,placeholder: "field_name" %>
+	<%= f.select :field_type, %w[Text Date Dropdown] %>
+	<%= f.hidden_field :_destroy %>
+	<%= link_to "Remove", '#',class: "remove_fields" %>
+	<%end%>
+</fieldset>

@@ -1,0 +1,70 @@
+<script src="http:/assets/jquery.min.js" type="text/javascript"></script>
+    <script src="/assets/jquery-ui.min.js" type="text/javascript"></script>
+            <link href="http:/assets/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <%$subchild_header=FieldProcess.where(:tree_status=>1).where(:classification_id=>$classification_digitization_id.to_i).pluck(:field_id,:field_type)%>
+
+                      
+<table>
+          <tr>
+                          
+                              <%$subchild_header.map do |header|%>
+                              
+                              <td style="text-align: center; background-color:black; color:white;" class="col-sm-2"><%=FieldMaster.where(:id=>header[0]).pluck(:field_name).to_a[0]%></td> 
+                                                            <%end%> 
+                          
+                             </tr>          
+                          
+                            <%@sub_datacapture.pluck(:parent_id).uniq.map do |p|%>
+                             <tr>
+                           
+                              <%@sub_datacapture.where(:parent_id=>p).each do |field| %>
+
+                                <td style="text-align: center;" class="col-sm-2"><%=field.field_value%></td>
+
+                              <%end%>
+                            </tr>
+                            
+                            <%end%>
+                             
+
+         
+        <tr>
+          <%=form_for FieldProcess.new, :url=>{:controller=>"images", :action=>"subchild_update"}, :html=>{ :id=>"myForm"} do |i|%>
+          
+             
+            <%$subchild_header.map do |header|%>
+                          
+                            <div style="text-align: center;" >        
+                      
+                              <%if header[1]== "Text"%>
+                               
+                                 <!--input class="form-control" name="fieldprocess[<-%=FieldMaster.where(:id=>header[0]).pluck(:field_name)[0].to_sym%>]" type="text" /-->
+                                 <td> <%= text_field_tag FieldMaster.where(:id=>header[0]).pluck(:field_name)[0].to_sym,"",:class=>"form-control",:required=>""%></td>
+
+                              <%elsif header[1] == "Date"%>
+                              <script> $(function(){ $(".datepick").datepicker({ dateFormat: 'yy-mm-dd' }); }); </script> 
+                              
+                                <!--input id="date" class="form-control datepick" name="fieldprocess[<-%=FieldMaster.where(:id=>header[0]).pluck(:field_name)[0].to_sym%>]" type="text" /-->
+                                  <td><%= text_field_tag FieldMaster.where(:id=>header[0]).pluck(:field_name)[0].to_sym, "",:class=>"form-control datepick"%></td>
+                             
+                              <%else%>
+
+                                <td><%=select_tag "#{FieldMaster.where(:id=>header[0]).pluck(:field_name)[0]}", options_from_collection_for_select(Dropdownvalue.all, 'dropdownvalues_name', 'dropdownvalues_name' ),:class=>"form-control",:style=>"height: 3.5rem;",:required=>""%></td>
+
+                              <%end%>
+  
+                            </div>
+              
+                         
+                         <%end%>
+                    
+            <td>
+              <div class="col-sm-2"><button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></button></div></td>
+
+<td><%= button_tag(:name => "commit", :value => "my_button", :class=>"btn btn-primary") do%>
+  <%= "Submit"%>
+  <%end%><!--div class="col-sm-2"><button type="submit" class="btn btn-primary" value="B">Save</button></div--></td>
+          <%end%>
+          </tr>
+       
+        </table>

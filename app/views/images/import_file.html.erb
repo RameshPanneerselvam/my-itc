@@ -1,0 +1,46 @@
+<% if flash[:notice] %>
+
+  <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
+
+<% end %>
+
+<%=form_for @select_classification,:url=>{:controller=>"images",:action=>"download_template"} do |f|%>
+
+ <div class="row"> 
+
+    <div class="col-sm-2"> 
+
+      <%= f.select "id",options_from_collection_for_select(@classification, "id", "classification_name"),{:include_blank=>"Select Option"},:required=>"true",:class=> "form-control"%>
+
+    </div>
+
+    <div class="col-sm-1">
+
+  <button type="submit" class="btn btn-primary" ><i class="fa fa-arrow-down" aria-hidden="true"></i>&nbsp;Template</button>
+
+</div>
+
+</div>
+
+<%end%>
+
+<h3>Alread have template?</h3>
+
+<%=form_for @data,:url=>{:controller=>"images",:action=>"import_data"} do |f|%>
+
+  <div class="row"> 
+
+    <div class="col-sm-2">
+
+      <%= f.select "id",options_from_collection_for_select(@classification, "id", "classification_name"),{:include_blank=>"Select Option"},:required=>"true",:class=> "form-control"%>
+
+    </div>
+
+    <div class="col-sm-4"><%=f.file_field :file, :accept => 'csv',:required=>"",:class=> "form-control"%></div>
+
+    <div class="col-sm-2"><button type="submit" class="btn btn-primary" ><i class="fa fa-arrow-up" aria-hidden="true"></i>&nbsp;Import</button></div>
+
+  </div>
+
+ <%end%>
+

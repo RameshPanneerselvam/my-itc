@@ -1,0 +1,207 @@
+ <!--meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+        <!--link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+       <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+        <script src="/assets/bootstrap.min.js"></script>
+        <!--script src="https://use.fontawesome.com/2bea6896d9.js"></script-->
+        <script src="/assets/jquery-ui.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+            $(document).ready(function () { 
+            $("#smcCompny").change(function () {
+            if ($(this).val() === "Dropdown") {
+               $(function () {$("#myModal5").modal({
+                show: true
+                  }) });
+                    }
+
+                    });
+              });
+          
+        </script> 
+
+<script type="text/javascript">
+function closeMe(element) {
+  $(element).parent().remove();
+}
+
+function addMore() {
+  var container = $('#list');
+  var item = container.find('.default').clone();
+  item.removeClass('default');
+  //add anything you like to item, ex: item.addClass('abc')....
+  item.appendTo(container).show();
+}
+</script>
+
+  <!--div class="row"-->
+
+    <div style="margin-left: 25%;" class="col-md-8">
+ 
+      <div class="panel panel-primary">
+ 
+        <div class="panel-heading"><center><strong>Child Attribute</strong></center></div>
+                        
+          <div class="panel-body">
+
+            <div class="row">
+            
+              <div class="col-md-3" style="text-align: center;">Field Name</div>
+            
+              <div class="col-md-3" style="text-align: center;">Field Type</div>
+
+              <div class="col-md-3" style="text-align: center;">For</div>
+
+              <div class="col-md-3" style="text-align: center;">Remove</div>
+            
+            </div><br>
+  
+            <%if @field1 != nil%>  
+  
+              <%index=0%>          
+              
+              <%@field1.each do |field|%>
+            
+                <div class="row">
+               
+                  <div class="col-md-3" style="text-align: center;"><%=FieldMaster.where(:id=>field.field_id).to_a[0].field_name%></div>
+            
+                  <div class="col-md-3" style="text-align: center;"><%=field.field_type%></div>
+            
+                  <div class="col-md-3" style="text-align: center;"><%=field.specification%></div>
+            
+                  <div class="col-md-3" style="text-align: center;"><%=link_to '<i class="fa fa-trash" aria-hidden="true"></i>'.html_safe, images_destroy_child_field_path(field.id), data: { confirm: 'Are you sure?' },:class=>"btn btn-primary"%></div>
+               
+                </div>
+               
+              <%end%>
+
+            <%end%><br>       
+           
+            <%= form_for FieldMaster.new,:url=>{:controller=>"images", :action=>"create_child_attribute",remote: true} do|m|%>
+           
+              <div class="row">
+            
+               <div class="col-md-3" style="text-align: center;"><%= m.select "id",options_from_collection_for_select(FieldMaster.order("field_name ASC"), "id", "field_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"", :style=>"height: 3.5rem;" %></div>
+              
+                <div class="col-md-3" style="text-align: center;"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:class=>"form-control",:required=>"", :style=>"height: 3.5rem;",:id=>"smcCompny" ) %></div>
+
+                <div class="col-md-3" style="text-align: center;"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:class=>"form-control",:required=>"", :style=>"height: 3.5rem;" ) %></div>
+             
+                <div class="col-md-3" style="text-align: center;"><button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
+            
+              </div>
+
+            <%end%>
+
+          </div>
+    
+        </div>
+  
+      </div>
+
+  <!--/div-->
+
+  <center><button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus" aria-hidden="true"></i> New Field</button>
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal5">Dropdown popup</button></center>
+
+  <div class="modal fade" id="myModal2" role="dialog">
+   
+    <div class="modal-dialog modal-sm">
+   
+      <div class="modal-content">
+   
+        <div class="modal-header">
+   
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+   
+          <h4 class="modal-title">Create Your Field</h4>
+   
+        </div>
+   
+        <div class="modal-body">
+   
+          <table>
+   
+            <tr>
+   
+              <%= form_for FieldMaster.new,:url=>{:controller=>"images", :action=>"create_child_attribute"} do|p|%>
+
+                <td><%=p.text_field :field_name,:class=>"form-control",:placeholder=>"Field Name",:style=>"width:95%;",:required=>""%></td>
+
+                <td><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:id=>"smcCompny",:style=>"height: 3.5rem;",:class=>"form-control",:required=>"") %></td>
+
+                <td><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"") %></td>
+                
+             </tr>
+   
+          </table>
+   
+        </div>
+   
+        <div class="modal-footer">
+        
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+          <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button></div>
+           
+          <%end%>
+           
+        </div>
+      
+      </div>
+    
+    </div>
+  
+  </div>
+  
+<div class="modal fade" id="myModal5" role="dialog">
+  
+  <div class="modal-dialog modal-sm">
+  
+    <div class="modal-content">
+  
+      <div class="modal-header">
+  
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+  
+        <center><h4 class="modal-title">dropdownlist</h4></center>
+  
+      </div>
+  
+      <div class="modal-body">
+        
+                
+       <%= form_for @dropdown,:url=>{:controller=>"images", :action=>"create_child_dropdownvalue"} do|s|%>
+
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+            <ul id="list">
+    
+              <li class="default" style="display: none;">
+        
+                <input name="values[]" type="text" /><span style="cursor: pointer;" onclick="closeMe(this);"><i class="fa fa-trash" aria-hidden="true"></i></span>
+
+              </li>
+
+            </ul>
+
+            <a href="#" onclick="addMore();"><i class="fa fa-plus-circle fa-2x"></i></a>
+  
+        <div class="modal-footer">
+  
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+          <button type="submit" class="btn btn-success">Save</button>
+
+          <%end%>
+  
+        </div>
+      
+      </div>
+    
+    </div>
+  
+  </div>

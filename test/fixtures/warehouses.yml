@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  warehouse_name: MyString
+  branch_id: MyString
+
+two:
+  warehouse_name: MyString
+  branch_id: MyString

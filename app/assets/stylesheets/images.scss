@@ -1,0 +1,57 @@
+// Place all the styles related to the images controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+  
+.log {
+    background-image: url("../assets/truckk.jpg");
+    background-size: cover;
+    height: 56%;
+    position: fixed;
+    width: 100%;
+}
+
+.navbar-inverse {
+    background-color: #0263AF !important;
+    border-color: #080808;
+    color :whitw !important;
+    }
+    .navbar {
+    position: relative;
+    min-height: 52px;
+    margin-bottom: 0px !important;
+    border: 1px solid transparent;
+}
+body {
+    background-color: white !important ;
+    color: black !important
+       }
+       .modal-dialog {
+    width: 354px !important;
+    }
+    
+.my {
+    background-color: white ;	
+}
+
+.container1 {
+    border-style: ridge;
+    border-width: thick;
+    margin-left: 33%;
+    position: absolute;
+    height: 35%;
+    width: 26%;
+    border-radius: 10px;
+    margin-top: 10%;
+}
+.btn-suc {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    margin-top: 25%;
+}
+.navbar-inverse .navbar-brand {
+    color: white !important;
+}

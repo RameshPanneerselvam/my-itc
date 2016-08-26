@@ -1,0 +1,117 @@
+<div class="row">
+                 <div class="col-md-3"> </div><div class="col-md-6">
+               <div class="panel panel-primary">
+                        <div class="panel-heading">
+                        <strong> WAREHOUSE EDIT FORM</strong>
+                        </div>
+                        <div class="panel-body">
+
+
+<!--%= render 'form', warehouse: @warehouse %-->
+
+<%= form_for(@warehouse) do |f| %>
+  <% if @warehouse.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@warehouse.errors.count, "error") %> prohibited this warehouse from being saved:</h2>
+
+      <ul>
+      <% @warehouse.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :warehouse_name %>
+    <%= f.text_field :warehouse_name ,:class=>"form-control" %>
+  </div>
+  <div class="form-group">
+
+    <%= f.label :warehouse_code %>
+    <%= f.text_field :warehouse_code ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div class="form-group">
+
+    <%= f.label :iwarehouse_code %>
+    <%= f.text_field :warehouse_code ,:class=>"form-control", :required=>"true"%>
+  </div>
+
+  <div style="display:none;">
+    <%= f.label :branch_id %>
+    <%= f.text_field :branch_id ,:class=>"form-control" %>
+    <%= f.text_field :branch_code ,:class=>"form-control" %>
+  </div>
+  
+ <%= f.fields_for :contact_attributes do |ff| %>
+ <div class="form-group">
+    <%= ff.label :landline %>
+    <%= ff.text_field :landline, :value => @warehouse.contact[0].landline ,:class=>"form-control"%>
+  </div>
+ 
+ 
+ <div class="form-group">
+    <%= ff.label :extension %>
+    <%= ff.text_field :extension, :value => @warehouse.contact[0].extension ,:class=>"form-control"%>
+  </div>
+  <div class="form-group">
+    <%= ff.label :mobilenumber1 %>
+    <%= ff.text_field :mobilenumber1, :value => @warehouse.contact[0].mobilenumber1 ,:class=>"form-control" %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :mobilenumber2  %>
+    <%= ff.text_field :mobilenumber2, :value => @warehouse.contact[0].mobilenumber2 ,:class=>"form-control"  %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :email %>
+    <%= ff.text_field :email, :value => @warehouse.contact[0].email ,:class=>"form-control" %>
+  </div>
+<% end %>
+
+<%= f.fields_for :address_attributes do |ff| %>
+ <div class="form-group">
+    <%= ff.label :address1 %>
+    <%= ff.text_field :address1, :value => @warehouse.address[0].address1 ,:class=>"form-control" %>
+  </div>
+ <div class="form-group">
+    <%= ff.label :address2 %>
+    <%= ff.text_field :address2, :value => @warehouse.address[0].address2 ,:class=>"form-control" %>
+  </div>
+<div class="form-group">
+    <%= ff.label :country %>
+  <select name="warehouse[address_attributes[country]]" class="countries form-control" id="countryId">
+<option value="">Select Country</option>
+</select>
+  </div>
+ <div class="form-group">
+    <%= ff.label :state %>
+    <select name="warehouse[address_attributes[state]]" class="states form-control" id="stateId">
+<option value="">Select State</option>
+</select>
+  </div>
+<div class="form-group">
+    <%= ff.label :city %>
+<select name="warehouse[address_attributes[city]]" class="cities form-control" id="cityId">
+<option value="">Select City</option>
+</select>
+  </div>
+<% end %>
+
+ 
+ <div class="form-group">
+    <%= f.submit 'edit',:class=>"btn btn-primary" %>
+  </div>
+<% end %>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<%= link_to 'Show', @warehouse %> |
+<%= link_to 'Back', warehouses_path %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://lab.iamrohit.in/js/location.js"></script>
+
