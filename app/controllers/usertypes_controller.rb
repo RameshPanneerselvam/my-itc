@@ -28,7 +28,7 @@ class UsertypesController < ApplicationController
 
     respond_to do |format|
       if @usertype.save
-        format.html { redirect_to @usertype, notice: 'Usertype was successfully created.' }
+        format.html { redirect_to @usertype, success: 'Usertype was successfully created.' }
         format.json { render :show, status: :created, location: @usertype }
       else
         format.html { render :new }
@@ -56,7 +56,7 @@ class UsertypesController < ApplicationController
   def destroy
     @usertype.destroy
     respond_to do |format|
-      format.html { redirect_to usertypes_url, notice: 'Usertype was successfully destroyed.' }
+      format.html { redirect_to usertypes_url, danger: 'Usertype was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -12,147 +12,114 @@
  
       <div class="panel-heading">
  
-        <center><strong>Select folder or create new folder to upload</strong></center>
- 
+        <strong>Select folder or create new folder to upload</strong>
+
+        <a style="margin-left:60%;" class="btn btn-success" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-plus"></i> New Folder</a>
       </div>
+      <div aria-expanded="true" style="width: 20%; margin-left: auto; border: 1px solid rgb(51, 122, 183);" class="pull-xs-right collapse" id="collapseExample">
+      
+  <div class="card card-block">
+    <%= form_for Folder.new,:url=>{:controller=>"images",:action=>"create_folder"} do |i|%>
+      <br>
+            <div class="section">
+      
+                    
+              <%= i.text_field :folder_name,:value => "New Folder",:class=>"form-control",:autofocuse=>true ,:required=>true%>
+      
+            </div>
+      <br>
+            <div class="section" align="right">
+              <%= i.submit "Save" ,:class=>"btn btn-info"%>
+      
+            </div>
+      
+          <%end%>
+  </div>
+</div>
+ 
+      <br>
       
       <div class="panel-body">
 
-        <div class="col-md-12">
+        <%if $warehouse_id.present?%>Warehouse Name :<%=Warehouse.where(:id=>$warehouse_id).pluck(:warehouse_name)[0]%><br><%end%> 
 
-            <%@all_folder.map do |k|%>
+        <%@off_id=User.where(:id=>current_user.id).pluck(:office_id)[0]%>
 
-            <div class="col-md-4">
-  
-              <i class="fa fa-folder fa-1x" aria-hidden="true"></i>&nbsp;<%=link_to k.folder_name,images_image_browse_path(k)%>
+      <%@name=OfficeType.where(:id=>@off_id).pluck(:type_name)[0]%>
 
-            </div>  
+      <!--%if @name=="Branch"%-->
 
-            <%end%>
+        <!--%=form_for @image,:url=>{:controller=>"images",:action=>"image_browse"} do |f|%-->
 
-            <%if @show_upload==1%>
-  
-              <a class="btn btn-success" data-toggle="modal" data-target="#applyModal1"><i class="fa fa-arrow-up" aria-hidden="true"></i> Upload Image</a>
-  
-            <%end%>
+          <!--table>
 
-            <div class="modal fade" id="applyModal1" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
+            <tr>
 
-              <div class="modal-dialog modal-dialog_2">
-   
-                <div class="modal-content" style="margin-top: 180px;">
+              <td><!--%= f.collection_select :id, @w_name, :id, :warehouse_name ,{prompt: "--Select warehouse--"},{:class=>"form-control"}%></td>
+
+              <td><button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" aria-hidden="true"></i> Click</button></td>
+
+            </tr>
+
+          </table>
+
+        <!--%end%>
+ 
+      <!--%end%--><br>
+
       
-                  <div class="modal-header">
-      
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-      
-                    <h4 class="modal-title" id="myModalLabel">
 
-                      <div class="head_4">
-      
-                        <div style="font-size: 100%; font-family: times;">Upload Image</div>
-      
-                      </div>
-      
-                    </h4>
+      <div class="col-md-12">
+<%u=1%>
+        <%@all_folder.map do |k|%>
+          <div class="col-md-4">
      
-                  </div>
-
-                  <div class="modal-body">
-      
-                    <%= form_for Image.new, :url=>{:controller=>"images", :action=>"save_image",:id=>params[:format]} do|i|%>
-
-                      <div class="section">
-      
-                        <%= i.label :image_path, "Select Image",:style=>"font-family: t;"%>
-      
-                        <%= i.file_field :image_path,multiple:true,:class=>"btn btn-success",:id=>"input"%>
-      
-                      </div>
-
-                      <div class="section" align="center">
-       
-                        <!--%= i.submit "Upload",:class=>"btn btn-success"%-->
-
-                        <%= button_tag(type: "submit", :class=> "btn btn-sucess", :required=>"true") do %><i class="fa fa-cloud-upload"></i> Upload<% end %>
-      
-                      </div>
-       
-                    <%end%>
-      
-                  </div>
-      
-                </div>
-      
-              </div>
-    
-            </div><br>
-
-            <%unless @show_upload == 1%>
+  <%=image_tag "/assets/folder.png",:style=>"width:10%;"%><a href="" data-toggle="modal" data-target="#gridSystemModal<%=u%>">
+  <%=k.folder_name%>
   
-              <a class="btn btn-success" data-toggle="modal" data-target="#applyModal2"><i class="fa fa-plus"></i> Folder</a>
+            <!--%=image_tag "/assets/folder.png",:style=>"width:10%;"%><-%=link_to k.folder_name,images_image_browse_path(k), :remote => true, "data-toggle" => "modal", "data-target" => "#applyModal1"%-->
+</a>
      
-            <%end%>
-  
-            <div class="modal fade" id="applyModal2" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
-
-              <div class="modal-dialog modal-dialog_2">
-    
-                <div class="modal-content" style="margin-top: 180px;">
-   
-                  <div class="modal-header">
-      
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-      
-                    <h4 class="modal-title" id="myModalLabel">
-      
-                      <div class="head_4">
-      
-                        <div style="font-size: 100%; font-family: times;">Create New Folder</div>
-      
-                      </div>
-             
-                    </h4>
-      
-                  </div>
-
-                  <div class="modal-body">
-      
-                    <%= form_for Folder.new,:url=>{:controller=>"images",:action=>"create_folder"} do |i|%>
-      
-                      <div class="section">
-      
-                        <%= i.label :folder_name,:style=>"font-family: t;"%>
-      
-                        <%= i.text_field :folder_name,:value => "New Folder",:class=>"form-control",:autofocuse=>true ,:required=>true%>
-      
-                      </div>
-      
-                      <div class="section" align="center">
-      
-                        <%= i.submit "Save" ,:class=>"btn btn-info"%>
-      
-                      </div>
-      
-                    <%end%>
-      
-                  </div>
-      
-                </div>
-      
-              </div>
-
-            </div>   
-  
-                
-
-        </div>
-     
+<div id="gridSystemModal<%=u%>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridModalLabel">Upload Image</h4>
       </div>
-     
-    </div>      
+       <%= form_for Image.new, :url=>{:controller=>"images", :action=>"save_image",:id=>k} do|i|%>
+      <div class="modal-body">
+      
+                <div class="section">
+      
+                  <%= i.label :image_path, "Select Image",:style=>"font-family: t;"%>
+      
+                    <%= i.file_field :image_path,multiple:true,:class=>"btn btn-success",:id=>"input"%>
+      
+                </div>
+
+           </div>     
+       <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <%= button_tag(type: "submit", :class=> "btn btn-sucess", :required=>"true") do %><i class="fa fa-cloud-upload"></i> Upload<% end %>
+      </div>
+              <%end%>
+      
+      </div>
+      </div>
+      
+    </div>
+    <%u=u+1%>
+    </div>  
+        <%end%>
+        
   
-  </div>   
+ </div>
+      
+      </div>
+      
+    </div>
+        
+  </div>          
 
-</div> 
-
+ </div>          

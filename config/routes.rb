@@ -9,7 +9,10 @@ Rails.application.routes.draw do
   get 'pagemasters/pagesetting_page'
   post 'pagemasters/pagesetting'
   get 'users/user_dashboard'
-  post 'users/user_report' 
+  post 'users/user_report'
+   get 'users/branch_dashboard'
+  post 'users/branch_report'
+   
   get 'images/image_browse'
   post 'images/image_browse'
 
@@ -69,7 +72,7 @@ Rails.application.routes.draw do
   get  'images/dropdownvalue'
   post 'images/dropdownvalue'
   
-  get  'images/create_dropdownvalue'
+  #get  'images/create_dropdownvalue'
   post 'images/create_dropdownvalue'
 
      get  'images/select_classification'

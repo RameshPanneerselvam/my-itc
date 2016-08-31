@@ -1,34 +1,92 @@
-<div class="row">
-               
-               <div class="panel panel-primary">
-                        <div class="panel-heading">
-                        	<i class="fa fa-gears"> Menu Configuration</i>
-                           </div>
-                        <div class="panel-body">
-
-
-<%= form_for PageSetting.new,:url=>{:controller=>"pagemasters", :action=>"pagesetting",remote: true} do|f|%>
-<div class="form-group col-md-3"><%= f.collection_select("user_id", User.where(:office_id=>current_user.office_id), 'id', 'first_name',{prompt: "Select User"},{:class=>"form-control"})%></div>
-
-<%@pagemaster=Pagemaster.where(:office_id=>current_user.office_id)%>
-<table class="table">
-
-<% @pagemaster.where(:parent_id=>0).each do |k|%>
-<tr><td></td><td> <%= check_box_tag 'pages[]', k.id %></td>
-        <td><%= k.page_name %> </td></tr>
-<% @pagemaster.where(:parent_id=>k.id).each do |p|%>
-       <tr><td></td><td></td><td><%= check_box_tag 'pages[]', p.id %></td>
-       <td><%= p.page_name %> </td><!--td><input type="checkbox" name="colors-1[]"/>Create</td><td><input type="checkbox" name="colors-1[]"/>Edit</td><td><input type="checkbox" name="colors-1[]"/>Delete</td--></tr>
-<%end%>
-<%end%>
-</table>
-<div class="form-group">
-<%=f.submit "Configure", :class=>"btn btn-primary"%></span>
-
-<%end%>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <i class="fa fa-gears"> Menu Configuration</i>
+  </div>
+  <div class="panel-body">
+    <%= form_for PageSetting.new,:url=>{:controller=>"pagemasters", :action=>"pagesetting",remote: true} do|f|%>
+    <div class="row">
+    <div class="form-group col-md-3">
+      <%= f.collection_select("user_id", User.where(:office_id=>current_user.office_id), 'id', 'first_name',{prompt: "Select User"},{:class=>"form-control"})%>
+    </div>
+    </div>
+    <%@pagemaster=Pagemaster.where(:office_id=>current_user.office_id)%>
+    <br>
+    <br>
+    <%t=1%>
+    <div class="panel-group driving-license-settings" id="accordion">
+      <div class="panel panel-default">
+        <div class="row">
+        <div class="col-lg-2">
+          </div>
+          <div class="col-lg-4">
+          
+        <div class="panel-heading" style="color:white; background-color:gray;">
+    <strong><i class="fa fa-chain"> Menu list</i></strong>
+  </div>
+  </div>
+          <div class="col-lg-4">
+          </div>
+          <div class="col-lg-4">
+          </div>
+          </div>
+        <% @pagemaster.where(:parent_id=>0).each do |k|%>
+        <div class="row">
+          <div class="col-lg-2">
+          </div>
+          <div class="col-lg-8" style="left: 3%;">
+            <div class="checkbox">
+              <label data-toggle="collapse" data-target="#collapseOne<%=t%>">
+                <input type="checkbox" name="pages[]" value="<%=k.id%>"/>
+                <!--%= check_box_tag 'pages[]', k.id%--><%= k.page_name %>
+              </label>
+            </div>
+          </div>
+        </div>        
+          <div id="collapseOne<%=t%>" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <div class="driving-license-kind">
+                <% @pagemaster.where(:parent_id=>k.id).each do |p|%>
+                <div class="row">
+                  <div class="col-lg-2"></div>
+                  <div class="col-lg-1"></div>
+                  <div class="col-lg-8">
+                <div class="checkbox">
+                  <%= check_box_tag 'pages[]', p.id %>
+                  <%= p.page_name %>
+                </div>
+              </div>
+            </div>
+                <%end%>
+              </div>
+            </div>
+          </div>
+        <%t=t+1%>
+        <%end%>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+          </div>
+          <div class="col-lg-4">
+          
+<div class="form-group" style="left:23%;" >
+      <%=f.submit "Configure", :class=>"btn btn-primary"%>
+    </div>
+  </div>
+          <div class="col-lg-4">
+          </div>
+          <div class="col-lg-4">
+          </div>
+          </div>
+    
+    <%end%>
+  </div>
 </div>
-</div>
-</div>
-<script>
-
+<script type="text/javascript">
+$('.collapse').collapse()
 </script>
+
+
+    
+
+  

@@ -1,3 +1,8 @@
+
+<style>
+.font {font-family: t;}
+ 
+</style>
 <script> function myFunction() { confirm("Do you want to create a field"); } </script>
 
 <% if flash[:notice] %>
@@ -8,17 +13,18 @@
 
 <div style="width: 125%;" class="panel panel-primary">
  
-  <div class="panel-heading"><center><strong>Classification</strong></center></div>
+  <div class="panel-heading"><strong class="font">Classification Creation</strong> <button style="margin-left: 70%;" type="button" class="btn btn-default btn-sm font" data-toggle="modal" data-target="#myModal"><i class="fa fa-font-awesome" aria-hidden="true"></i> New classification</button></div>
     <div class="panel-body">
       <%@all_classification.map do |i|%>
+
           <div class="col-md-4">
   
-              <i class="fa fa-folder fa-1x" aria-hidden="true"></i>&nbsp;<%=link_to i.classification_name,images_attribute_creation_path(i) %>
+              <i class="fa fa-link fa-1x" aria-hidden="true"></i>&nbsp;<%=link_to i.classification_name,images_attribute_creation_path(i),:class=>"font"%>
 
             </div>   
+         
       <%end%>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-font-awesome" aria-hidden="true"></i> Classification</button>
-
+     
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   
         <div style="width: 400px;" class="modal-dialog" role="document">
@@ -29,7 +35,7 @@
         
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         
-              <center><h4 class="modal-title" id="myModalLabel">Create Category</h4></center>
+              <center><h4 class="modal-title font" id="myModalLabel">Create Category</h4></center>
       
             </div>
       
@@ -41,17 +47,17 @@
 
                 <tr>
 
-                  <td><%= i.label :classification_name,"Classification Name:"%></td>
+                  <td><%= i.label :classification_name,"Classification Name:" ,:class=> "font"%></td>
 
-                  <td><%=i.text_field :classification_name,:required=>""%></td>
+                  <td><%=i.text_field :classification_name,:required=>"",:class=> "form-control font"%></td>
 
                 </tr>
          
                 <tr>
 
-                  <td><%= i.label :classification_description,"Classification Description:"%></td>
+                  <td><%= i.label :classification_description,"Classification Description:",:class=> "font"%></td>
             
-                  <td><%=i.text_field :classification_description,:required=>""%></td>
+                  <td><%=i.text_field :classification_description,:required=>"",:class=> "form-control font"%></td>
 
                 </tr>
 
@@ -61,9 +67,9 @@
       
             <div class="modal-footer">
         
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default font" data-dismiss="modal">Close</button>
 
-              <%=i.submit "Save",:class=>"btn btn-primary",:onclick=>"myFunction()" %>
+              <%=i.submit "Save",:class=>"btn btn-primary font",:onclick=>"myFunction()" %>
      
               <%end%>
     
@@ -75,45 +81,6 @@
  
       </div>
 
-      <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal1"><i class="fa fa-plus-circle"></i> Fields</button>
-
-      <div class="modal fade" id="myModal1" role="dialog">
-    
-        <div class="modal-dialog modal-sm">
-      
-          <div class="modal-content">
-        
-            <div class="modal-header">
-          
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-          
-              <center><h4 class="modal-title">Add & Edit field</h4></center>
-        
-            </div>
-        
-            <div class="modal-body">
-            
-              <%= form_for Classification.new,:url=>{:controller=>"images", :action=>"attribute_creation",:method=>"post"} do|i|%>
-
-                <%= i.select "id",options_from_collection_for_select(Classification.order("classification_name ASC"), "id", "classification_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"true", :style=>"height: 3.5rem;"%>
-
-            </div>
-    
-            <div class="modal-footer">
-        
-              <%=i.submit "Save",:class=>"btn btn-primary"    %>
-          
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-           
-              <%end%>
-        
-            </div>
-    
-          </div>
-    
-        </div>
- 
-      </div>
   
     </div>
     

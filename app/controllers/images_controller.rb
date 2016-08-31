@@ -1,73 +1,134 @@
+require 'will_paginate/array'
 require 'csv'
 class ImagesController < ApplicationController
 skip_before_filter :verify_authenticity_token  
 
 def image_browse
-  if params[:format].present?
-    $folder_id=params[:format]
-    @show_upload=1
-    
-  else
-    $folder_id=nil
-  end
+  @image=Image.new
   Folder.where(:folder_name=>nil).delete_all
-   @all_folder=Folder.all
-   @image=Image.new
+@w_name=Warehouse.where(:branch_id=>$branch_id)
+@ty_name=OfficeType.find_by(:id=>current_user.office_id).type_name
+ if @ty_name=="Branch"
+  $warehouse_id=nil
+  if params[:image].present?
+    $warehouse_id=params[:image][:id].to_i
+   
+    @all_folder=Folder.where(:warehouse_id=>$warehouse_id).where(:branch_id=>$branch_id).where(:created_at=>(Date.today)..(Date.tomorrow))
+else
+    @all_folder=Folder.where(:branch_id=>$branch_id).where(:created_at=>(Date.today)..(Date.tomorrow))
 end
+#elsif @ty_name=="Warehouse"
+     # @all_folder=Folder.where(:warehouse_id=>$warehouse_id).where(:branch_id=>$branch_id).where(:created_at=>(Date.today)..(Date.tomorrow))
+end
+ 
 
+end
  def create_folder
+    
     @folder=Folder.new(folder_params)
-    @all=Folder.pluck(:folder_name)
+  
+    @all=Folder.where(:branch_id=>$branch_id).pluck(:folder_name)
+  
     if @all.include?(@folder.folder_name)
-      flash[:notice] = "Foldername is alredy exists..."
+  
+      flash[:danger] = "Foldername is alredy exists..."
+  
       redirect_to :action=>"image_browse" 
+  
     else
-     @folder.save
-     @folder.update_attributes(:parent_folder_id=>$folder_id) 
+  
+      @folder.save
+  
+      @folder.update_attributes(:warehouse_id=>$warehouse_id,:branch_id=>$branch_id) 
+
+      flash[:success] = "Folder has been successflly saved"
+   
       redirect_to :action=>"image_browse"
+   
     end
+  
   end
-
-
+  
 def save_image
-    @imgg=image_params[:image_path]
-    @imgg.each do |i|
-      @image = Image.new(:image_path=>i)
-     Folder.where(:id=>$folder_id).update(:folder_status=>nil)
-     @image.save
-      @id=@image.id
-      Imagecurrentstatus.create(:image_id=>@id,:folder_id=>$folder_id,:image_status=>0,:allocation_status=>0,:group_id=>0,:classification_id=>0)      
-    end 
-    flash[:notice] = "Successflly Saved."
-    redirect_to :action=>"image_browse"
+ 
+  if params[:id].present?
+ 
+    @folder_id=params[:id].to_i
+ 
+  end
+ 
+  @imgg=image_params[:image_path]
+ 
+  @imgg.each do |i|
+ 
+    @image = Image.new(:image_path=>i)
+ 
+    @image.save
+ 
+    @image.update_attributes(:warehouse_id=>$warehouse_id,:branch_id=>$branch_id)
+ 
+    @id=@image.id
+ 
+    Imagecurrentstatus.create(:image_id=>@id,:folder_id=>@folder_id,:image_status=>0,:allocation_status=>0,:classification_id=>0)      
+ 
+  end 
+ 
+  flash[:success] = "Your image has been successflly uploaded."
+  
+  redirect_to :action=>"image_browse"
+
 end
 
 
 def image_classification
+  
   classification_id=Activity.where(:activity_name=>"classification").pluck(:id)[0]
-  if params[:format].present?
-    $folder_id=params[:format]
-  end
-  @all_image=[]
-  @all_image1=[]
-  image_id=ProcessLog.where(:activity_id=>classification_id).where(:user_id=>current_user.id).where(:status=>nil).pluck(:process_specific_id)
-@image=Image.where(:id=>image_id[0])
-  image_id.map do |ff|   
-    if Imagecurrentstatus.where(:folder_id=>$folder_id).where(:image_id=>ff).to_a[0] != nil
-    @all_image << Imagecurrentstatus.where(:folder_id=>$folder_id).where(:image_id=>ff).to_a[0].image_id
-  end
-  end
-    @all_image.map do |k|
-      unless Image.where(:id=>k).empty?
-        @all_image1 << Image.where(:id=>k).to_a
-      end
+  
+    if params[:format].present?
+    
+      $folder_id=params[:format]
+    
     end
-     @all_image1=@all_image1.flatten!
-  end 
+   
+    @all_image=[]
+  
+    @all_image1=[]
+  
+    image_id=ProcessLog.where(:activity_id=>classification_id).where(:user_id=>current_user.id).where(:status=>nil).pluck(:process_specific_id)
+
+    @image=Image.where(:id=>image_id[0])
+  
+    image_id.map do |ff|   
+    
+      if Imagecurrentstatus.where(:folder_id=>$folder_id).where(:image_id=>ff).to_a[0] != nil
+    
+        @all_image << Imagecurrentstatus.where(:folder_id=>$folder_id).where(:image_id=>ff).to_a[0].image_id
+  
+      end
+  
+    end
+    
+    @all_image.map do |k|
+    
+      unless Image.where(:id=>k).empty?
+     
+        @all_image1 << Image.where(:id=>k).to_a
+      
+      end
+
+    end
+    if @all_image1 != []
+    @all_image1=@all_image1.flatten!
+    
+    @mm=@all_image1.paginate(:per_page => 5, :page => params[:page])
+  end
+end 
 
 
 def classification_update
-  Imagecurrentstatus.grouping_process(params)
+  user_id=current_user.id
+  Imagecurrentstatus.grouping_process(params,user_id)
+  flash[:notice] = "Successflly Classified."
   redirect_to :action=>"image_classification"
 end
 
@@ -79,74 +140,42 @@ end
        $classification_id=Classification.last.id
      end
       @field=FieldMaster.new
-      @field_name1=FieldProcess.where(:tree_status=>0).any_of({classification_id: $classification_id},{classification_id: $classification_id.to_i})
-      @check_box_classification=FieldProcess.where(:classification_id=>$classification_id).where(:subchild_flag=>0)
+      @field_name1=FieldProcess.where(:classification_id=>$classification_id)
        @dropdownvalue=[]   
     dropdown_id=FieldProcess.where(:classification_id=>$classification_id).pluck(:id)
      dropdown_id.map { |ff| @dropdownvalue << Dropdownvalue.where(:field_process_id=>ff).to_a[0]  }
      @dropdownvalue=@dropdownvalue.compact
      @dropdown=Dropdownvalue.new
-    end
+  end
 
   def create_attribute
-    if params[:field_master].keys[0] != "id"
-      if params[:field_master]["field_name"].split.count !=1
-        a=params[:field_master]["field_name"].split[0].capitalize
-        b=params[:field_master]["field_name"].split[1].capitalize
-        field_name=a+b
-      else
-        field_name=params[:field_master]["field_name"]
+    if params[:parent] == "Parent field"
+      tree_status=0
+      if params[:check] == "1"
+        @subchild_flag=1
       end
+    else
+      tree_status=1
+    end
+    if params[:field_master].keys[0] != "id"
+     field_name=params[:field_master][:field_name].gsub(/ /,"_").capitalize
       @field=FieldMaster.create(:field_name=>field_name)
-      FieldProcess.create(:field_type=>params["field_type"],:field_id=>@field.id,:specification=>params["specification"],:classification_id=>$classification_id,:tree_status=>0,:subchild_flag=>0)
+      FieldProcess.create(:field_type=>params["field_type"],:field_id=>@field.id,:specification=>params["specification"],:classification_id=>$classification_id,:tree_status=>tree_status,:subchild_flag=>@subchild_flag)
       Dropdownvalue.where(:field_process_id=>nil).update_all(:field_process_id=>FieldProcess.last.id)
     else     
-     FieldProcess.create(:field_type=>params["field_type"],:specification=>params["specification"],:field_id=>params[:field_master].values[0].to_i,:classification_id=>$classification_id,:tree_status=>0,:subchild_flag=>0)
+     FieldProcess.create(:field_type=>params["field_type"],:specification=>params["specification"],:field_id=>params[:field_master].values[0].to_i,:classification_id=>$classification_id,:tree_status=>tree_status,:subchild_flag=>@subchild_flag)
      Dropdownvalue.where(:field_process_id=>nil).update_all(:field_process_id=>FieldProcess.last.id)
     end  
-    flash[:notice] = "Successflly Saved."
+    flash[:warning] = "Successflly Saved."
     redirect_to :action=>"attribute_creation"
   end
  
   def child_attribute
     $classification_id= params[:classification]["id"]
+    flash[:success] = "Successflly saved child_attribute."
     redirect_to :action=>"child_attribute_creation"
   end
   
-  def child_attribute_creation
-    $check_box_value=params[:field_name]
-    @field_child=FieldMaster.new
-      @field1=FieldProcess.where(:tree_status=>1).any_of({classification_id: $classification_id},{classification_id: $classification_id.to_i})
-      @dropdownvalue=[]   
-    dropdown_id=FieldProcess.where(:classification_id=>$classification_id).pluck(:id)
-     dropdown_id.map { |ff| @dropdownvalue << Dropdownvalue.where(:field_process_id=>ff).to_a[0]  }
-     @dropdown=Dropdownvalue.new
-  end
- 
-  def create_child_attribute
-    if params[:field_master].keys[0] != "id"
-       if params[:field_master]["field_name"].split.count !=1
-        a=params[:field_master]["field_name"].split[0].capitalize
-        b=params[:field_master]["field_name"].split[1].capitalize
-        field_name=a+b
-       else
-        field_name=params[:field_master]["field_name"]
-       end
-      @field=FieldMaster.create(:field_name=>field_name)
-        @ff=FieldProcess.create(:field_type=>params["field_type"],:specification=>params["specification"],:field_id=>@field.id,:classification_id=>$classification_id,:tree_status=>1,:subchild_flag=>0)
-       else
-       FieldProcess.create(:field_type=>params["field_type"],:specification=>params["specification"],:field_id=>params[:field_master].values[0],:classification_id=>$classification_id,:tree_status=>1,:subchild_flag=>0)
-       Dropdownvalue.where(:field_process_id=>nil).update_all(:field_process_id=>FieldProcess.last.id)
-     end    
-           unless $check_box_value.nil?
-             $check_box_value.map do |k|
-               FieldProcess.where(:field_id=>k).where(:tree_status=>0).update(:subchild_flag=>1)
-             end
-          end
-       $check_box_value=nil
-       flash[:notice] = "Successflly Saved."
-       redirect_to :action=>"child_attribute_creation"
-  end
 
   def classification_creation
     @classification=Classification.new 
@@ -160,7 +189,7 @@ end
         flash[:notice] = "Successflly Saved."
         redirect_to :action=>"attribute_creation"
       else
-        flash[:notice] = "Sorry not Saved"
+        flash[:error] = "Sorry not Saved"
         render "classification_creation"
       end
    
@@ -168,10 +197,10 @@ end
 
   def destroy_field
     @field1=FieldProcess.find params[:format]
-  
+     Dropdownvalue.where(:field_proess_id=>@field1.id).delete_all  
     @field1.delete
   
-    flash[:notice] = "Successflly Deleted."
+    flash[:alert] = "Successflly Deleted."
   
     redirect_to :action=>"attribute_creation"
   end
@@ -180,19 +209,20 @@ def destroy_child_field
   
     @field1.delete
   
-    flash[:notice] = "Successflly Deleted."
+    flash[:error] = "Successflly Deleted."
   
     redirect_to :action=>"child_attribute_creation"
   end
   def destroy
     @folder=Folder.find params[:id]
     @folder.delete
-    flash[:notice] = "Successflly Deleted."
+    flash[:danger] = "Successflly Deleted."
     redirect_to :action=>"digitization"
   end
 
   def attribute_allocation
     $classification_id=params[:classification].values[0]
+    flash[:warning] = "Successflly Allocated."
     redirect_to :action=>"attribute_creation"
   end
 def allocation_classification
@@ -205,13 +235,27 @@ def allocation_classification
   @img=Imagecurrentstatus.where(:image_status=>0).where(:allocation_status=>0).where(:folder_id=>params[:format]).pluck(:image_id)
 end
 Folder.where(:folder_name=>nil).delete
-  @folder=Folder.where(:folder_status=>nil).to_a
-end  
+  @folder=Folder.where(:branch_id=>$branch_id).to_a
+  end  
 
 def allocated_classification
-ProcessLog.classification_process(params)
-redirect_to :action=>"allocation_classification"
-end 
+  ee=params[:group]
+ if ee.nil?
+ flash[:alert] = "Please select atleast one folder..."
+ redirect_to :action=>"allocation_classification"
+else
+  ee.map do |folder|
+    Folder.where(:id=>folder)
+    img_id=Imagecurrentstatus.where(:folder_id=>folder).where(:image_status=>0).where(:allocation_status=>0).pluck(:image_id)
+    img_id.map do |img|
+      ProcessLog.create(:activity_id=>$classification_idd,:user_id=>params[:image][:id],:process_specific_id=>img)
+      Imagecurrentstatus.where(:image_id=>img).update(:allocation_status=>1)
+        end
+  end
+  flash[:success] = "Successflly Allocated."
+  redirect_to :action=>"allocation_classification"
+end
+end
 
 def allocation_digitization
    $digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0]
@@ -221,14 +265,33 @@ def allocation_digitization
 end  
 
 def allocated_digitization
-  ProcessLog.digitization_process(params)
-  redirect_to :action=>"allocation_digitization"
+  byebug
+f_id=params[:group]
+if f_id.nil?
+ flash[:alert] = "Please select atleast one folder..."
+ redirect_to :action=>"allocation_digitization"
+else
+f_id.map do |folder1|
+@g_id=Imagecurrentstatus.where(:folder_id=>folder1).where(:image_status=>"1").where(:allocation_status=>"0").pluck(:group_id).uniq
+
+@g_id.map do |k|
+  ProcessLog.create(:activity_id=>$digitization_id,:user_id=>params[:image][:id],:process_specific_id=>k)
+      Imagecurrentstatus.where(:group_id=>k).update_all(:allocation_status=>1)
+     end
+     end  
+     flash[:notice] = "Successflly Created."
+     redirect_to :action=>"allocation_digitization"
+end
+  
 end  
+
 
  
  
 def digitization
-
+  if params[:id].present?
+    $classification_digitization_id=params[:id].to_i
+  end
    current_group=[]
    @all_image1=[]
   digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0]
@@ -237,26 +300,16 @@ def digitization
     if params[:format].present?
       $fol_id=params[:format]
     end
-    if params[:classification].present?
-      $classification_digitization_id=nil
-      $classification_digitization_id=params[:classification]["id"]
-    end
    @process_id=ProcessLog.where(:user_id=>current_user.id).where(:status=>nil).where(:activity_id=>digitization_id).pluck(:process_specific_id)
 if @process_id != nil
 
       @process_id.map do |i|
-          current_group << Imagecurrentstatus.where(:group_id=>i).where(:folder_id=>$fol_id).where(:image_status=>1).where(:classification_id=>$classification_digitization_id).to_a[0]
-          classification << Imagecurrentstatus.where(:group_id=>i).where(:folder_id=>$fol_id).where(:image_status=>1).to_a[0]
+          current_group << Imagecurrentstatus.where(:group_id=>i).where(:folder_id=>$fol_id).where(:image_status=>1).to_a[0]
       end
-classification.compact!
-classification=classification.pluck(:classification_id)
-classification.uniq!
-  classification.map { |i| @classification << Classification.where(:id=>i).to_a[0]  }
+
           current_group.compact!
           $count=current_group.count
 if current_group != []
- 
-          
           $image_group_id=current_group[0].group_id
           image_id=Imagecurrentstatus.where(:group_id=>$image_group_id).pluck(:image_id)
           image_id.map { |i| @all_image1 << Image.where(:id=>i).to_a[0]  }
@@ -264,38 +317,40 @@ if current_group != []
 end
 if @all_image1 != []
   @all_image2=@all_image1[0]
-end
- @image_exception=ImageException.new
- @headers=FieldProcess.where(:tree_status=>0).any_of({classification_id: $classification_digitization_id},{classification_id: $classification_digitization_id.to_i})
- @datacapture=Datacapture.where(:classification_id=>$classification_digitization_id).where(:capture_flag=>1).where(:user_id=>current_user.id)
- @select_classification=Classification.new
-
+  $classification_digitization_id=Imagecurrentstatus.where(:image_id=>image_id[0].to_i).pluck(:classification_id)[0].to_i
+ 
+ end
+ @datacapture=Datacapture.where(:capture_flag=>1).where(:user_id=>current_user.id).where(:classification_id=>$classification_digitization_id)
+ @headers=FieldProcess.where(:classification_id=>$classification_digitization_id).where(:tree_status=>0)
+@image_exception=ImageException.new
+@select_classification=Classification.new
   end
 
 
    def save_remark
-    ImageException.skip_process(params)
+    user_id=current_user.id
+    ImageException.skip_process(params,user_id)
+    flash[:success] = "Successflly Saved."
     redirect_to :action=>"digitization"
   end
 
   def create_digitization
-    Datacapture.data_entry_process(params)
+    user_id=current_user.id
+    Datacapture.data_entry_process(params,user_id)
+    flash[:success] = "Successflly Saved."
       redirect_to :action=>"digitization"    
   end
 
 
 
   def create_dropdownvalue
+    
      params[:values].shift
      dropdownvalue=params[:values]
      dropdownvalue.map { |ff| Dropdownvalue.create(:dropdownvalues_name=>ff)  }
+ #    render "attribute_creation"
   end
 
- def create_child_dropdownvalue
-   params[:values].shift
-   dropdownvalue=params[:values]
-   dropdownvalue.map { |ff| Dropdownvalue.create(:dropdownvalues_name=>ff)  }
-  end
 
    
   
@@ -308,23 +363,29 @@ end
 
     def import_data
     Dataimport.import_process(params)
+    flash[:success] = "Successflly Import File."
     redirect_to :action=>"import_file"
    end
   
-  def download_template
-    field_names=[]
-    template_name=Classification.where(:id=>params[:classification][:id]).pluck(:classification_name)
-     field=FieldProcess.where(:classification_id=>params[:classification][:id]).not.where(:specification=>"D").pluck(:field_id)
-     field.map { |i| field_names << FieldMaster.where(:id=>i).to_a[0].field_name  }
-     CSV.open("#{Rails.root}/public/templates/template.csv","w", {:col_sep => "\t",:row_sep => "\r\n"}) do |csv|
+ def download_template
+    @field_names=[]
+     @field=FieldProcess.where(:classification_id=>params[:classification][:id].to_i).not.where(:specification=>"D").pluck(:field_id)
+     @field.map { |i| @field_names << FieldMaster.find_by(:id=>i).field_name }
 
-     csv << field_names
+#     CSV.open("#{Rails.root}/public/templates/template.csv","w", {:col_sep => "\t",:row_sep => "\r\n"}) do |csv|
+
+ #    csv << field_names
   
+  #end
+  respond_to do |format|
+    format.html
+    format.csv { send_data @field_names.to_csv }
+    format.xls # { send_data @products.to_csv(col_sep: "\t") }
   end
-  
-    redirect_to "/templates/template.csv"
+    #redirect_to "/templates/template.csv"
 
   end
+
 
 
 def document_allocate_digitization
@@ -353,6 +414,7 @@ def document_allocated_digitization
       ProcessLog.create(:activity_id=>$digitization_id,:user_id=>@doc_user_id,:process_specific_id=>kk)
       Imagecurrentstatus.where(:group_id=>kk).update_all(:allocation_status=>1)
  end
+ flash[:success] = "Successflly Saved."
   redirect_to :action=>"document_allocate_digitization"
  end
 
@@ -361,14 +423,16 @@ def self_audit
       $classification_digitization_id=Classification.where(:id=>params[:id])
     end
   @datacapture=Datacapture.new
-  @old_data=Datacapture.where(:classification_id=>$classification_digitization_id).where(:capture_flag=>1)
-  $group_id=@old_data.pluck(:group_id).uniq!
+  @old_data=Datacapture.where(:classification_id=>$classification_digitization_id).where(:capture_flag=>1).where(:user_id=>current_user.id)
+  $group_id=@old_data.pluck(:group_id).uniq
   @headers=FieldProcess.where(:tree_status=>0).any_of({classification_id: $classification_digitization_id},{classification_id: $classification_digitization_id.to_i})
   
 end
 
 def update_classification
-  Datacapture.data_update(params)
+  user_id=current_user.id
+  Datacapture.data_update(params,user_id)
+  flash[:warning] = "Successflly Updated."
   redirect_to :action=>"self_audit"
 end
 
@@ -405,10 +469,12 @@ def subchild_update
      
      if params.include?(:commit)
       Datacapture.subchild_process(params) 
-      
+      flash[:success] = "Successflly Saved."
         redirect_to :action=>"digitization" , :format  => Imagecurrentstatus.find_by(:group_id=>$image_group_id).folder_id.to_i
      else
+
       Datacapture.subchild_process(params) 
+      flash[:error] = "Opps! You have some mistake."
         redirect_to :action=>"sub_data" , :format  => $datacapture_id
      end
 end

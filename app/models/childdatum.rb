@@ -3,7 +3,7 @@ class Childdatum
   include Mongoid::Timestamps
   field :field_name
   field :field_value
-  field :datacapture_id
-  field :parent_id
+  field :datacapture_id, type: Integer
+  field :parent_id, type: Integer
   field :isactive
 end

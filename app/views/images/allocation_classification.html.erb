@@ -22,23 +22,24 @@
     <div class="row">
                 
                <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                         List of  Folders to Allocate
-                        </div>
-                        <div class="panel-body">
-    <%@folder.each do |ii|%>
+                        
+                           <div class="panel-body">
+    <%@val=[]%>
+    <%@folder.map do |ii|%>
+   
 <%@cou=Imagecurrentstatus.where(:folder_id=>ii.id).where(:image_status=>0).where(:allocation_status=>0).count%>
+ 
 <%unless @cou==0%>
       <div class="col-md-3">  <%= check_box_tag 'group[]',ii.id%>
 
         <i class="fa fa-folder"> <%=link_to ii.folder_name,images_allocation_classification_path(ii.id)%></i>(<%=@cou%>)</div>
-
+<%@val << 1%>
     <%end%><%end%>
 </div>
 </div>
 </div>
 
-
+<%unless @val.empty?%>
     <div class="row"> 
 
         <div class="col-sm-2"> 
@@ -48,9 +49,10 @@
         </div>
 
         <div class="col-sm-1"><button type="submit" class="btn btn-primary" >Allocate</button></div>
-
+<%else%>
+No Folders To Allocate
 </div>
-
+<%end%>
 <%end%>
 </div>
 </div>

@@ -1,27 +1,59 @@
 <!DOCTYPE html>
+
 <html>
+
   <head>
+
     <title>CloudDataManagement</title>
+
     <%= csrf_meta_tags %>
+
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
   </head>
+
+  <style>.font {font-family: t;} </style>
 
   <body>
    
     <%if current_user%>
 
-    <%= render 'layouts/header' %>
-   <div id="wrapper">
-   <div id="page-wrapper">
-      <div class="container-fluid">
-  <%end%>
- <% flash.each do |name, msg| %>
-    <%= content_tag :div, msg, :id => "flash_#{name}" %>
-  <% end %>
-    <%= yield %>
-   </div>
- </div>
-  </div>
+      <%= render 'layouts/header' %>
+   
+      <div id="wrapper">
+   
+        <div id="page-wrapper">
+      
+          <div class="container-fluid">
+  
+            <%end%>
+ 
+            <div>
+             
+              <% flash.each do |key, value| %>
+    
+                <div class="<%= flash_class(key) %> fade in">
+      
+                  <a href="#" data-dismiss="alert" class="close">×</a>
+      
+                  <%= value %>
+    
+                </div>
+  
+              <% end %>
+
+            </div>
+            
+            <%= yield %>
+   
+          </div>
+ 
+        </div>
+  
+      </div>
+
   </body>
+
 </html>

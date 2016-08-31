@@ -3,11 +3,7 @@
         <strong> Digitization Allocation</strong>
     </div>
      <div class="panel-body">
-<% if flash[:notice] %>
 
-    <center><div style="color: green;" class="alert alert"><%= flash[:notice]%></div></center>
-
-<% end %>
 <div class="row">
                     
                <div class="panel panel-primary">
@@ -15,7 +11,7 @@
                          Select Folder or Click Folder to Allocate
                         </div>
                         <div class="panel-body">
-
+<%unless @fold.empty?%>
 <%=form_for @image,:url=>{:controller=>"images",:action=>"allocated_digitization"} do |f|%>
 <div class="row">
                     
@@ -51,6 +47,9 @@
 
     </div>
     
+<%end%>
+<%else%>
+No folders to allocate
 <%end%>
 </div>
 </div>

@@ -3,19 +3,20 @@ class Datacapture
   include Mongoid::Timestamps
   field :field_name
   field :field_value
-  field :classification_id
+  field :classification_id, type: Integer
   field :capture_flag
-  field :group_id
+  field :group_id, type:Integer
   field :isactive
   field :user_id
-  
 
-  def self.data_entry_process(params)
+
+
+  def self.data_entry_process(params,user_id)
  digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0]
     $head.map do |field|
-      Datacapture.create(:field_name=>field[0],:field_value=>params[field[0]],:classification_id=>$classification_digitization_id,:group_id=>$image_group_id,:capture_flag=>1,:user_id=>$user_id)
+      Datacapture.create(:field_name=>field[0],:field_value=>params[field[0]],:classification_id=>$classification_digitization_id,:group_id=>$image_group_id,:capture_flag=>1,:user_id=>user_id)
       Imagecurrentstatus.where(:group_id=>$image_group_id).update_all(:image_status=>2)
-      ProcessLog.where(:user_id=>$user_id).where(:activity_id=>digitization_id).where(:process_specific_id=>$image_group_id).update_all(:status=>1)       
+      ProcessLog.where(:user_id=>user_id).where(:activity_id=>digitization_id).where(:process_specific_id=>$image_group_id).update_all(:status=>1)       
     end
   end
 def self.subchild_process(params) 
@@ -44,7 +45,8 @@ def self.subchild_process(params)
   end
   
 end
-   def self.data_update(params)
+   def self.data_update(params,user_id)
+      digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0].to_i
       field_names=[]
       field_id=FieldProcess.where(:classification_id=>$classification_digitization_id.to_i).where(:tree_status=>0).pluck(:field_id)
       field_id.map { |i| field_names << FieldMaster.where(:id=>i).to_a[0].field_name }
@@ -57,10 +59,10 @@ end
         Datacapture.where(:group_id=>group_id)  .delete_all
         k=0
          dat.map do |ff| 
-           Datacapture.create(:group_id=>group_id,:field_name=>field_names[k],:field_value=>ff,:capture_flag=>2,:classification_id=>$classification_digitization_id)
+           Datacapture.create(:group_id=>group_id,:field_name=>field_names[k],:field_value=>ff,:capture_flag=>2,:classification_id=>$classification_digitization_id,:user_id=>user_id)
            k=k+1
          end
-         ProcessLog.where(:process_specific_id=>group_id).update(:status=>2)
+         ProcessLog.where(:process_specific_id=>group_id).where(:activity_id=>digitization_id).update(:status=>2)
          index=index+1
       end
     end

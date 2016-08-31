@@ -29,7 +29,7 @@ class WarehousesController < ApplicationController
 
     respond_to do |format|
       if @warehouse.save
-        format.html { redirect_to @warehouse, notice: 'Warehouse was successfully created.' }
+        format.html { redirect_to @warehouse, success: 'Warehouse was successfully created.' }
         format.json { render :show, status: :created, location: @warehouse }
       else
         format.html { render :new }
@@ -45,7 +45,7 @@ class WarehousesController < ApplicationController
       if @warehouse.update(warehouse_params.keep_if{|p,q| q.class != ActionController::Parameters}) 
         @warehouse.address.update(warehouse_params[:address_attributes])
        @warehouse.contact.update(warehouse_params[:contact_attributes])
-        format.html { redirect_to @warehouse, notice: 'Warehouse was successfully updated.' }
+        format.html { redirect_to @warehouse, warning: 'Warehouse was successfully updated.' }
         format.json { render :show, status: :ok, location: @warehouse }
       else
         format.html { render :edit }
@@ -59,7 +59,7 @@ class WarehousesController < ApplicationController
   def destroy
     @warehouse.destroy
     respond_to do |format|
-      format.html { redirect_to warehouses_url, notice: 'Warehouse was successfully destroyed.' }
+      format.html { redirect_to warehouses_url, danger: 'Warehouse was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

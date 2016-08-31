@@ -1,0 +1,165 @@
+<div class="content-wrapper">
+
+  <div class="content-heading">
+
+    <center><strong><%=Branch.where(:id=>$branch_id).pluck(:branch_name)[0]%> Branch Dashboard</strong></center>
+                        
+  </div>
+  
+  <div class="panel-body">
+
+
+<table class="table">
+<thead>
+<th>Folder Name</th>	
+<th>Wait for Allocation (Classification)</th>
+<th>Classification Allocated</th>
+<th>Classification Completed</th>
+<th>Wait for Allocation (Digitization)</th>
+<th>Digitization Allocated</th>
+<th>Digitization Completed</th>
+</thead>	
+<%@branch_folder=Folder.where(:branch_id=>$branch_id).pluck(:id)%>
+<%@branch_folder.map do |jj|%>
+<%@fold_name=Folder.where(:id=>jj).pluck(:folder_name)[0]%>
+<%@count1=Imagecurrentstatus.where(:image_status=>0).where(:allocation_status=>0).where(:folder_id=>jj).count%>
+<%@count2=Imagecurrentstatus.where(:image_status=>0).where(:allocation_status=>1).where(:folder_id=>jj).count%>
+<%@count3=Imagecurrentstatus.where(:image_status=>1).where(:allocation_status=>0).where(:folder_id=>jj).count%>
+<%group1=Imagecurrentstatus.where(:image_status=>1).where(:allocation_status=>0).where(:folder_id=>jj).pluck(:group_id)%>
+<%group1=group1&group1%>
+<%@count4=group1.count%>
+<%group2=Imagecurrentstatus.where(:image_status=>1).where(:allocation_status=>1).where(:folder_id=>jj).pluck(:group_id)%>
+<%group2=group2&group2%>
+<%@count5=group2.count%>
+<%group3=Imagecurrentstatus.where(:image_status=>2).where(:allocation_status=>0).where(:folder_id=>jj).pluck(:group_id)%>
+<%group3=group3&group3%>
+<%@count6=group3.count%>
+<% unless @count1==0 && @count2==0 && @count3==0 && @count4==0 && @count5==0 %>
+<tbody>
+<tr>
+<td><%=@fold_name%></td>	
+<td><%=@count1%></td>
+<td><%=@count2%></td>
+<td><%=@count3%></td>
+<td><%=@count4%></td>
+<td><%=@count5%></td>
+<td><%=@count6%></td>
+</tr>
+</tbody>
+<%end%>
+<%end%>
+</table>
+
+ <div class="panel panel-primary">
+  
+        <div class="panel-heading">Select Details to Generating Reports</div>
+                        
+          <div class="panel-body">
+<%@user=User.where(:parent_id=>$branch_id,:office_id=>$office_id)%>
+<%=form_for @user1, :url=>{:controller=>"users",:action=>"branch_report"} do |i|%>
+
+  <div class="field">
+<%=i.label :from%><input type="text" name="from"  id="txtFrom" class="form-control">
+</div>
+  <div class="field">
+<%=i.label :To%><input type="text" name="to"   id="txtTo" class="form-control">
+</div>
+<div class="field">
+  <lable>Select User</lable>
+<%=i.collection_select :id, @user, :id, :first_name ,{prompt: "Select User"},{class: "form-control"}%>
+</div>
+<div class="field">
+<%= i.submit "click",:class=>"btn btn-primary"%>
+</div>
+<%end%>
+</div>
+</div>
+
+<%if $params3.blank? &&  $params1.present? && $params2.present?%>
+Completed Folders<br>
+<%$folder1.map do |i|%>
+<%@grou_id=Imagecurrentstatus.where(:folder_id=>i).pluck(:group_id)%>
+<%@grou_id=@grou_id.compact.uniq%>
+<%unless @grou_id.empty?%>
+<%@arr1=[]%>
+<%@arr2=[]%>
+<%@grou_id.map do |j|%>
+<%@arr1 << ProcessLog.where(:updated_at=>($params1)..($params2)).where(:activity_id=>2).any_of({:status=>1},{:status=>2}).where(:process_specific_id=>j).pluck(:id)[0]%>
+<%@arr2 << ProcessLog.where(:updated_at=>($params1)..($params2)).where(:activity_id=>2).where(:status=>9).where(:process_specific_id=>j).pluck(:id)[0]%>
+<%end%>
+<%@arr1=@arr1.compact%>
+<%@arr2=@arr2.compact%>
+<%@arr=@arr1+@arr2%>
+<%if @grou_id.count==@arr.count%>
+<%=Folder.where(:id=>i).pluck(:folder_name)[0]%>(<%=@arr1.count%>)(<%=@arr2.count%>)<br>
+<%end%>
+<%end%><%end%>
+
+
+<%elsif $params3.present? && $params1.present? && $params2.present?%>
+Classification<br>
+<%$folder1.map do |k|%>
+<%@i_d=Imagecurrentstatus.where(:folder_id=>k).pluck(:image_id)%>
+<%@i_d=@i_d.compact%>
+
+<%unless @i_d.empty?%>
+<%@c_id=[]%>
+<%@i_d.map do |l|%>
+<%@c_id << ProcessLog.where(:updated_at=>($params1)..($params2)).where(:activity_id=>1).where(:status=>0).where(:process_specific_id=>l).where(:user_id=>$params3).pluck(:id)[0]%>
+<%end%>
+
+<%@c_id=@c_id.compact.uniq%>
+<%if @i_d.count == @c_id.count%>
+<%=Folder.where(:id=>k).pluck(:folder_name)[0]%>(<%=@c_id.count%>)<br>
+<%end%><%end%><%end%><br>
+
+
+Digitization<br>
+<%$folder1.map do |m|%>
+<%@im_id = Imagecurrentstatus.where(:folder_id=>m).pluck(:group_id)%>
+<%@d_id1=[]%>
+<%@d_id2=[]%>
+<%@im_id=@im_id.compact.uniq%>
+<%unless @im_id.empty?%>
+<%@im_id.map do |n|%>
+<%@d_id1 << ProcessLog.where(:activity_id=>2).where(:process_specific_id=>n).where(:user_id=>$params3).pluck(:id)[0]%>
+<%@d_id2 << ProcessLog.where(:activity_id=>9).where(:process_specific_id=>n).where(:user_id=>$params3).pluck(:id)[0]%>
+ <%end%>
+ <%@d_id1=@d_id1.compact%>
+<%@d_id2=@d_id2.compact%>
+<%@d_id=@d_id1+@d_id2%>
+<%unless @d_id.empty?%>
+ <%@di_id1=[]%>
+ <%@di_id2=[]%>
+ <%@im_id.map do |t|%>
+<%@di_id1 << ProcessLog.where(:updated_at=>($params1)..($params2)).where(:activity_id=>2).any_of({:status=>1},{:status=>2}).where(:process_specific_id=>t).where(:user_id=>$params3).pluck(:id)[0]%>
+<%@di_id2 << ProcessLog.where(:updated_at=>($params1)..($params2)).where(:activity_id=>9).any_of({:status=>1},{:status=>2}).where(:process_specific_id=>t).where(:user_id=>$params3).pluck(:id)[0]%>
+ <%end%>
+<%@di_id1=@di_id1.compact%>
+<%@di_id2=@di_id2.compact%>
+<%@d_id=@d_id1+@d_id2%>
+<%@di_id=@di_id1+@di_id2%>
+<%if @d_id.count==@di_id.count%>
+<%=Folder.where(:id=>m).pluck(:folder_name)[0]%>(<%=@di_id1.count%>)(<%=@di_id2.count%>)<br>
+<%end%><%end%><%end%>
+<%end%><%end%>
+<%$params1=nil,$params2=nil,$params3=nil%>
+</div>
+</div>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+   
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    
+  <script type="text/javascript">
+        $(function(){
+        $("#txtTo").datepicker({ dateFormat: 'yy-mm-dd' });
+        $("#txtFrom").datepicker({ dateFormat: 'yy-mm-dd' }).bind("change",function(){
+            var minValue = $(this).val();
+            minValue = $.datepicker.parseDate("yy-mm-dd", minValue);
+            minValue.setDate(minValue.getDate()+1);
+            $("#txtTo").datepicker( "option", "minDate", minValue );
+        })
+    });
+    </script>

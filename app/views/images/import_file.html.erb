@@ -4,7 +4,7 @@
 
 <% end %>
 
-<%=form_for @select_classification,:url=>{:controller=>"images",:action=>"download_template"} do |f|%>
+<%=form_for @select_classification,:url=>{:controller=>"images",:action=>"download_template", :format=>'xls'} do |f|%>
 
  <div class="row"> 
 
@@ -16,7 +16,7 @@
 
     <div class="col-sm-1">
 
-  <button type="submit" class="btn btn-primary" ><i class="fa fa-arrow-down" aria-hidden="true"></i>&nbsp;Template</button>
+  <button type="submit" class="btn btn-primary"  ><i class="fa fa-arrow-down" aria-hidden="true"></i>&nbsp;Template</button>
 
 </div>
 

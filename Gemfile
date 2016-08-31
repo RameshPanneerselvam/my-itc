@@ -6,6 +6,8 @@ gem 'rails', '~> 5.0.0'
 gem 'validates_email_format_of'
 gem 'bootstrap', '~> 4.0.0.alpha3.1'
 gem 'font-awesome-rails', '~> 4.6', '>= 4.6.3.1'
+gem 'will_paginate', '~> 3.1'
+gem 'spreadsheet', '~> 1.1', '>= 1.1.3'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 gem 'mongoid', '~> 6.0.0.beta'

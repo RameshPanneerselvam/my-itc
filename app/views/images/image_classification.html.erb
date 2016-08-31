@@ -4,11 +4,12 @@
 
     <div style="height: 670px;" class="panel panel-primary">
   
-      <div class="panel-heading"><strong><center>Image Classification</center></strong></div>
+        <%unless @all_image1 == []%>
+  
+      <div class="panel-heading"><strong><center>Image Classification (<%=count=@all_image1.count%>)</center></strong></div>
                         
         <div class="panel-body">
-   
-          <%unless @all_image1.nil?%>
+        
 
             <div class="col-md-12">
       
@@ -16,97 +17,102 @@
 
                 <div class="panel-body">
           
-                <%=image_tag @all_image1[0].image_path, :id=>"s",:style=>"height:500px;width:110%;"%><br><br>
+                  <%=image_tag @all_image1[0].image_path,:class=>'zoom' , :id=>"s",:style=>"height:500px;width:110%;"%><br><br>
            
-                <div class="row"><center>
+                  <script src="/assets/wheelzoom.js"></script>
+  
+                  <script>wheelzoom(document.querySelector('img.zoom'));</script>
 
-                  <div class="col-md-2"><button id="plus" class="btn btn-info">+</button></div>
+                  <div class="row"><center>
 
-                  <div class="col-md-3"><h4 id="ct"></h4></div>
+                    <div class="col-md-2"><button id="plus" class="btn btn-info">+</button></div>
 
-                  <div class="col-md-1"><button id="minus" class="btn btn-info">-</button></div></center>
+                    <div class="col-md-3"><h4 id="ct"></h4></div>
+
+                    <div class="col-md-1"><button id="minus" class="btn btn-info">-</button></div></center>
                   
-                </div>
+                  </div>
           
-              </div>
-            </div>
-              <div style="margin-left: 4%;" class="col-md-6">
-
-                <%= form_tag images_classification_update_path do %> 
-
-                  <table>
-
-                    <tr>
-
-                      <td style="text-align: center;"><b>Grouping</b></td>
-
-                      <td style="text-align: center;"><b>Image list</b></td>
- 
-                      <td style="text-align: center;"><b>Select Classification</b></td>
-
-                    </tr>
-                    
-                    <%c=0%>
-                    
-                    <%count=@all_image1.count%>
-                  
-                    <% @all_image1.each do |img| %>  
-                  
-                      <%c+=1%>      
-                    
-                      <tr>              
-                      
-                        <%= fields_for 'images[]', img do |p| %>
-                        
-                          <td style="text-align: center;"><%=p.check_box :group %></td>
-                      
-                          <td style="text-align: center;" id="image<%=c%>" class="images<%=count%>"><%= img.image_path%></td>
-
-                          <td style="text-align: center;"><%=p.collection_select(:id,Classification.all, :id, :classification_name,{include_blank: 'Select a Option'},{:class => "form-control"})%></td>
-                      
-                        <%end%>
-
-                      </tr>
-
-                    <%end%></div>
-
-                  </table><br><br>
-
-                  <center><%= submit_tag "Submit",:class=>"btn btn-info"%></center>
-               
-                <%end%>
-
-                <div style="width: 20%; margin-left: 57%; margin-top: -6.5%;" class="col-md-12">
-
-                 
-
                 </div>
-              
+
               </div>
             
-            </div>  
-          
+            <div style="margin-left: 4%;" class="col-md-6">
+
+              <%= form_tag images_classification_update_path do %> 
+
+                <table class="table">
+
+                    <thead>
+
+                      <th style="text-align: center;"><b>Grouping</b></th>
+
+                      <th style="text-align: center;"><b>Image Name</b></th>
+
+                      <th style="text-align: center;"><b>Image List</b></th>
+ 
+ 
+                      <th style="text-align: center;"><b>Select Classification</b></th>
+
+                    </thead>
+                    
+                  <%c=0%>
+                
+                  <% @all_image1.each do |img| %> 
+
+                    <%c+=1%>      
+                    
+                    <tr>              
+                      
+                      <%= fields_for 'images[]', img do |p| %>
+                      
+                        <td style="text-align: center;"><%=p.check_box :group %></td>
+                        <td style="text-align: center;"><%=img[:image_path] %></td>
+                        <td style="text-align: center;" id="image<%=c%>" class="images<%=count%>"><%= image_tag img.image_path,:style=>"height:30px;width:30%;"%></td>
+
+                        <td style="text-align: center;"><%=p.collection_select(:id,Classification.all, :id, :classification_name,{include_blank: 'Select a Option'},{:class => "form-control"})%></td>
+                      
+                      <%end%>
+                    
+                    </tr>
+                  
+                  <%end%>
+                  
+                </table>
+
+                <center><%= will_paginate @mm %></center>
+
+                <center><%= submit_tag "Submit",:class=>"btn btn-info"%>&nbsp;<%=link_to "Exit",users_user_dashboard_path,:class=>"btn btn-default"%></center>
+
+              <%end%>
+                
+            </div>
+
+            <div style="width: 20%; margin-left: 57%; margin-top: -6.5%;" class="col-md-12"></div>
+              
+            </div>
+            
           <%else%>
           
             <h2>No images to classification in this folder please select another folder</h2>
           
           <%end%>
 
-        </div>
-
+        </div>  
+           
       </div>
 
-    </div>
+  </div>
 
-<!--/div-->
-             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"
-            type="text/javascript"></script>
-<script type="text/javascript">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+
+ <script type="text/javascript">
             var cid ;
             var pid ;
             $( window ).load(function(){
-              var mm=$('#image1').html();
+              var mm=$('#image1').find("img").prop("src");
              
 var st=$('#image1').attr('id').match(/\d+/)[0];
 
@@ -114,7 +120,7 @@ cid=st.match(/\d+/)[0];
      var et=$("#image1").attr('class').match(/\d+/)[0];
      pid=parseInt(et);
      $('#ct').html(st+" "+"of"+" "+et);
-     $('#s').attr('src', mm)
+     $('#s').attr('src', mm);
   
 }); 
 
@@ -127,11 +133,11 @@ cid=st.match(/\d+/)[0];
      var st=$(this).attr('id').match(/\d+/)[0];
      var et=$(this).attr('class').match(/\d+/)[0];
      pid=parseInt(et);
-     var mm=$(this).html();
+     var mm=$(this).find("img").prop("src");
       
        $('#ct').html(st+" "+"of"+" "+et);
       
-        $('#s').attr('src', mm)
+        $('#s').attr('src', mm);
         
        
     });
@@ -140,14 +146,14 @@ $("#plus").click(function(){
 if (cid<pid)
 {
   var id=parseInt(cid)+1;
-  var mm=$('#image'+id).html();
+  var mm=$('#image'+id).find("img").prop("src");
 var st=$('#image'+id).attr('id').match(/\d+/)[0];
 var et=$("#image"+id).attr('class').match(/\d+/)[0];
-var mm=$("#image"+id).html();
+var mm=$('#image'+id).find("img").prop("src");
       
        $('#ct').html(st+" "+"of"+" "+et);
       
-        $('#s').attr('src', mm)
+        $('#s').attr('src', mm);
         cid=id;
 
 }
@@ -158,14 +164,14 @@ $("#minus").click(function(){
 if (cid>=2)
 {
   var id=parseInt(cid)-1;
-  var mm=$('#image'+id).html();
+  var mm=$('#image'+id).find("img").prop("src");
 var st=$('#image'+id).attr('id').match(/\d+/)[0];
 var et=$("#image"+id).attr('class').match(/\d+/)[0];
-var mm=$("#image"+id).html();
+var mm=$('#image'+id).find("img").prop("src");
       
        $('#ct').html(st+" "+"of"+" "+et);
       
-        $('#s').attr('src', mm)
+        $('#s').attr('src', mm);
         cid=id;
 }
 

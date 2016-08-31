@@ -21,12 +21,22 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
   end
-  def user_dashboard
-    $user_id=current_user.id
+    def user_dashboard
     digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0]
     classification_id=Activity.where(:activity_name=>"classification").pluck(:id)[0]
-    $office_id=User.where(:id=>$user_id).pluck(:office_id)[0]
-    $branch_id=User.where(:id=>$user_id).pluck(:parent_id)[0]
+    off_id=current_user.office_id#User.where(:id=>current_user.id).pluck(:office_id)[0]
+    name=OfficeType.where(:id=>off_id).pluck(:type_name)[0]
+    if name == "Branch"
+
+    $branch_id=current_user.parent_id#User.where(:id=>current_user.id).pluck(:parent_id)[0]
+    $office_id=current_user.office_id#User.where(:id=>current_user.id).pluck(:office_id)[0]
+    $warehouse_id=nil
+    #elsif name == "Warehouse"
+    #$warehouse_id=User.where(:id=>current_user.id).pluck(:parent_id)[0]
+    #$branch_id=Warehouse.where(:id=>$warehouse_id).pluck(:branch_id)[0]
+     #$office_id=User.where(:id=>current_user.id).pluck(:office_id)[0]
+     end
+       
 
    @user=User.new
   @v1=ProcessLog.where(:user_id=>current_user.id).where(:activity_id=>classification_id).pluck(:process_specific_id)
@@ -49,8 +59,8 @@ class UsersController < ApplicationController
   $to=params[:to]
   $classification_idd=Activity.where(:activity_name=>"classification").pluck(:id)[0]
   $digitization_id=Activity.where(:activity_name=>"digitization").pluck(:id)[0]
- @class_id=ProcessLog.where(:user_id=>$user_id).where(:activity_id=>$classification_idd).where(:status=>0).where(:updated_at=>(params[:from])..(params[:to])).pluck(:process_specific_id)
- @digi_id= ProcessLog.where(:user_id=>$user_id).where(:status=>1).where(:activity_id=>2).where(:updated_at=>(params[:from])..(params[:to])).pluck(:process_specific_id)
+ @class_id=ProcessLog.where(:user_id=>current_user.id).where(:activity_id=>$classification_idd).where(:status=>0).where(:updated_at=>(params[:from])..(params[:to])).pluck(:process_specific_id)
+ @digi_id= ProcessLog.where(:user_id=>current_user.id).where(:status=>1).where(:activity_id=>2).where(:updated_at=>(params[:from])..(params[:to])).pluck(:process_specific_id)
 @ff_id=[]
 @class_id.map do |i|
   @ff_id <<Imagecurrentstatus.where(:image_id=>i).pluck(:folder_id)[0]
@@ -73,9 +83,25 @@ end
   $ff1_id=@ff1_id
   $ff1_id=nil
 end
+flash[:warning] = "Successflly Updated."
 redirect_to :action=>"user_dashboard"
  end
    
+
+def branch_dashboard
+  @user1=User.new
+@branch=Branch.all
+end 
+
+def branch_report
+ $folder1=Folder.where(:branch_id=>$branch_id).pluck(:id)
+ $params1=params[:from]
+ $params2=params[:to]
+ $params3= params[:user][:id]
+ flash[:success] = "Successflly Updated."
+ redirect_to :action=>"branch_dashboard"
+end  
+    
   # POST /users
   # POST /users.json
   def create
@@ -85,7 +111,7 @@ redirect_to :action=>"user_dashboard"
     respond_to do |format|
       if @user.save
        Usermailer1Mailer.mail1(@user).deliver
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.html { redirect_to @user, success: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -101,7 +127,7 @@ redirect_to :action=>"user_dashboard"
       if @user.update(user_params.keep_if{|p,q| q.class != ActionController::Parameters})
         @user.address.update(user_params[:address_attributes])
        @user.contact.update(user_params[:contact_attributes])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to @user, warning: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -115,7 +141,7 @@ redirect_to :action=>"user_dashboard"
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to users_url, danger: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

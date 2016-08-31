@@ -3,11 +3,11 @@
 <html lang="en">
     <head>
  
-        <script src="/assets/jquery.min.js" type="text/javascript"></script>
-  
-        <script src="/assets/bootstrap.min.js"></script>
-  
-        <script src="/assets/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
+   
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css" rel="Stylesheet" type="text/css" />
   
          <script type="text/javascript">
             $(document).ready(function () {
@@ -65,23 +65,23 @@ function addMore() {
 
        <div class="panel panel-primary">
  
-        <div class="panel-heading"><center><strong>Attribute Creation</strong></center></div>
+        <div class="panel-heading"><center style="font-family: t;"><strong>Attribute Creation</strong></center></div>
                         
           <div class="panel-body">
     
       <div class="row">  
 
-        <div class="col-sm-2" style="text-align: center;">check box</div>
+        <div class="col-sm-1" style="text-align: center; font-family: t;">check box</div>
             
-        <div class="col-sm-3" style="text-align: center;">Field Name</div>
+        <div class="col-sm-2" style="text-align: center; font-family: t;">Field Name</div>
             
-        <div class="col-sm-3" style="text-align: center;">Field Type</div>
+        <div class="col-sm-2" style="text-align: center; font-family: t;">Field Type</div>
     
-        <div class="col-sm-3" style="text-align: center;">For</div>
+        <div class="col-sm-2" style="text-align: center; font-family: t;">For</div>
         
-        <div class="col-sm-3" style="text-align: center;">Select one</div>
+        <div class="col-sm-2" style="text-align: center; font-family: t;">Select one</div>
 
-        <div class="col-sm-3" style="text-align: center;">Remove</div>
+        <div class="col-sm-2" style="text-align: center; font-family: t;">Remove</div>
          
       </div><br>
 
@@ -91,17 +91,27 @@ function addMore() {
 
           <div class="row">
             
-            <div class="col-sm-2" style="text-align: center;"></div>
+            <div class="col-sm-1" style="text-align: center; font-family: t;"></div>
 
-            <div class="col-sm-3" style="text-align: center;"><%= FieldMaster.where(:id=>field.field_id).to_a[0].field_name%></div>
+            <div class="col-sm-2" style="text-align: center; font-family: t;"><%= FieldMaster.where(:id=>field.field_id).to_a[0].field_name%></div>
 
-            <div class="col-sm-3" style="text-align: center;"><%= field.field_type %></div>
+            <div class="col-sm-2" style="text-align: center; font-family: t;"><%= field.field_type %></div>
 
-            <div class="col-sm-3" style="text-align: center;"><%=field.specification%></div>
+            <div class="col-sm-2" style="text-align: center; font-family: t;"><%=field.specification%></div>
             
-            <div class="col-sm-3" style="text-align: center;"></div>
+            <%if field.tree_status == 1%>
+            
+              <%aa="Child"%>
+            
+            <%else%>
+            
+              <%aa="Parent"%>
+            
+             <%end%>
+            
+            <div class="col-sm-2" style="text-align: center; font-family: t;"><%="#{aa}"%></div>
 
-            <div class="col-sm-3" style="text-align: center;"><%= link_to '<i class="fa fa-trash" aria-hidden="true"></i>'.html_safe, images_destroy_field_path(field.id), data: { confirm: 'Are you sure?' },:class=>'btn btn-default'%></div>
+            <div class="col-sm-2" style="text-align: center; font-family: t;"><%= link_to '<i class="fa fa-trash" aria-hidden="true"></i>'.html_safe, images_destroy_field_path(field.id), data: { confirm: 'Are you sure?' },:class=>'btn btn-default'%></div>
           
           </div>
           
@@ -113,17 +123,17 @@ function addMore() {
                  
         <div class="row">
 
-          <div class="col-sm-2"><%=check_box_tag :check%> </div>
+          <div class="col-sm-1"><%=check_box_tag :check%> </div>
 
-          <div class="col-sm-3" style="text-align: center;"><%= m.select "id",options_from_collection_for_select(FieldMaster.order("field_name ASC"), "id", "field_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"true", :style=>"height: 3.5rem;" %></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= m.select "id",options_from_collection_for_select(FieldMaster.order("field_name ASC"), "id", "field_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"true", :style=>"height: 3.5rem;" %></div>
 
-          <div class="col-sm-3" style="text-align: center;"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:style=>"height: 3.5rem;",:class=>"form-control",:id=>"smcCompny") %></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:style=>"height: 3.5rem;",:class=>"form-control",:id=>"smcCompny",:required=>"",:include_blank=>"Select Option") %></div>
             
-          <div class="col-sm-3" style="text-align: center;"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"")%></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"",:include_blank=>"Select Option")%></div>
  
-          <div class="col-sm-3" style="text-align: center;"><%= select_tag(:specification, options_for_select(['Parent field','Child field'], selected: :specification ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"")%></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:parent, options_for_select(['Parent field','Child field'], selected: :parent ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"",:include_blank=>"Select Option")%></div>
      
-          <div class="col-sm-3" style="text-align: center;"><button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
 
           
            
@@ -145,11 +155,11 @@ function addMore() {
 
         <!--a href="/images/digitization"><button type="button" class="btn btn-warning"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;Digitization</button></a-->
 
-        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal6"><i class="fa fa-database" aria-hidden="true"></i> Dropdown popup</button>
+        <button style="font-family: t;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal6"><i class="fa fa-database" aria-hidden="true"></i> Add dropdownvalue</button>
 
-        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus" aria-hidden="true"></i> New Field</button>
+        <button style="font-family: t;" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2"><i class="fa fa-plus" aria-hidden="true"></i> New Field</button>
 
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="myFunction()" ><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;Submit</button>
+       <%=link_to " Exit",images_classification_creation_path,:style=>"color:black;",:class=>"btn btn-default fa fa-times"%>
 
       </div>
 
@@ -157,29 +167,33 @@ function addMore() {
 
       <div class="modal-dialog modal-sm">
     
-        <div class="modal-content">
+        <div style="width: 160%;" class="modal-content">
        
           <div class="modal-header">
           
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           
-            <h4 class="modal-title">Create Your Field</h4>
+            <h4 class="modal-title"><center>Create Your Field</center></h4>
         
           </div>
         
           <div class="modal-body">
  
-            <div class="col-xs-12">
+            <div class="col-md-12">
             
               <div class="row">
           
                 <%= form_for @field,:url=>{:controller=>"images", :action=>"create_attribute",remote: true} do|p|%>
 
-               <div class="col-sm-4"><%=p.text_field :field_name,:class=>"form-control",:placeholder=>"Field Name",:required=>""%> </div>
+                <div class="col-sm-1"><%=check_box_tag :check,:class=>"form-control"%></div>
 
-                <div class="col-sm-4"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:id=>"smcCompny",:style=>"height: 3.5rem;",:class=>"form-control",:required=>"") %> </div>
+               <div class="col-sm-3"><%=p.text_field :field_name,:class=>"form-control",:placeholder=>"Field Name",:required=>""%></div>
 
-              <div class="col-sm-4"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem; width: 130%;",:class=>"form-control",:required=>"") %> </div>
+                <div class="col-sm-3"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:id=>"smcCompny",:style=>"height: 3.5rem; font-family: t;",:class=>"form-control",:required=>"",:include_blank=>"Select Option") %></div>
+
+              <div class="col-sm-3"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem; font-family: t;",:class=>"form-control",:required=>"",:include_blank=>"Select Option") %></div>
+
+               <div class="col-sm-2" style="text-align: center;"><%= select_tag(:parent, options_for_select(['Parent field','Child field'], selected: :parent ),:style=>"height: 3.5rem; font-family: t;",:class=>"form-control",:required=>"",:include_blank=>"Select Option")%></div>
                 
              </div>
 
@@ -203,65 +217,6 @@ function addMore() {
 
     </div>
 
-    <div class="modal fade" id="myModal" role="dialog">
-   
-      <div class="modal-dialog modal-sm">
-      
-        <div class="modal-content">
-        
-          <div class="modal-header">
-          
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          
-            <center><h4 class="modal-title">Select Fields</h4></center>
-        
-          </div>
-        
-          <div class="modal-body">
-          
-            <center><table style="width: 80%;">
-        
-              <%= form_for @field,:url=>{:controller=>"images", :action=>"child_attribute_creation",:method=>"post"} do|p|%>
-         
-                <%unless @check_box_classification.nil?%>
-           
-                  <% @check_box_classification.each do |type| %>
-              
-                    <tr>
-
-                      <td><%= check_box_tag 'field_name[]', type.id%></td>
-               
-                      <td><%= FieldMaster.where(:id=>type.field_id).to_a[0].field_name%></td>
-
-                    </tr>
-                 
-                  <%end%>
-            
-                <% end %>
-            
-            </table></center>
-        
-         </div>
-        
-        <div class="modal-footer">
-        
-          <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-         
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-     
-          <%end%>
-
-        </div>
-      
-      </div>
-    
-    </div>
-  
-  </div>
-
-</div>
-
-  
 
   <!-- Modal -->
   <div class="modal fade" id="myModal6" role="dialog">
@@ -274,23 +229,13 @@ function addMore() {
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
  
-          <center><h4 class="modal-title">dropdownlist</h4></center>
+          <center><h4 class="modal-title font">Dropdownlist</h4></center>
  
         </div>
  
         <div class="modal-body">
-        
-          <%unless @dropdownvalue.compact.empty?%>
-        
-            <%@dropdownvalue.compact.each do |val| %>
-        
-              <center><%= val.dropdownvalues_name%></center>
-
-            <%end%>
-        
-          <%end%>
-                
-          <%= form_for @dropdown, :remote => true,:url=>{:controller=>"images", :action=>"create_dropdownvalue"} do|s|%>
+           
+          <%= form_for @dropdown, :url=>{:controller=>"images", :action=>"create_dropdownvalue"} do|s|%>
                 
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -298,21 +243,21 @@ function addMore() {
     
               <li class="default" style="display: none;">
         
-                <input name="values[]" type="text" /><span style="cursor: pointer;" onclick="closeMe(this);"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                <input name="values[]" type="text"/><span style="cursor: pointer;" onclick="closeMe(this);"><i class="fa fa-trash" aria-hidden="true"></i></span>
 
               </li>
 
             </ul>
-
-            <a href="#" onclick="addMore();"><i class="fa fa-plus-circle fa-2x"></i></a>
        
         </div>
         
         <div class="modal-footer">
-        
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
-          <button type="submit" class="btn btn-primary">Save</button>
+          <a href="#" onclick="addMore();" class="btn btn-primary" style="color:white;"><i class="fa fa-plus fa-1x"></i> ADD</a>
+
+          <button type="submit" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Submit</button>
+
+          <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Close</button>
             
           <%end%>
 

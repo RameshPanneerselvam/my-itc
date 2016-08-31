@@ -3,10 +3,12 @@ class Contact
   include Mongoid::Timestamps
   field :landline
   field :extension
-  field :mobilenumber1
+  field :mobilenumber1, type: Integer
   field :mobilenumber2
   field :email
   field :alternative_email
+  validates_presence_of :mobilenumber1
+  validates_presence_of :email
   embedded_in :user
     embedded_in :regional
      embedded_in :branch
