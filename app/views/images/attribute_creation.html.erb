@@ -9,20 +9,7 @@
     
   <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/start/jquery-ui.css" rel="Stylesheet" type="text/css" />
   
-         <script type="text/javascript">
-            $(document).ready(function () {
-            $("#smcCompny").change(function () {
-            if ($(this).val() === "Dropdown") {
-               $(function () {$("#myModal6").modal({
-                show: true
-                  }) });
-                    }
-
-                    });
-              });
-          
-        </script>                 
-        
+         
         <script>
 
             function myFunction() { confirm("Do you want to Create a child attribute");}
@@ -42,9 +29,8 @@ function addMore() {
   item.appendTo(container).show();
 }
 </script>
+</head>
 
-    </head>
-  
     <style>
    
         table, th, td {
@@ -71,7 +57,7 @@ function addMore() {
     
       <div class="row">  
 
-        <div class="col-sm-1" style="text-align: center; font-family: t;">check box</div>
+        <div class="col-sm-1" style="text-align: center; font-family: t;">If Manitary?</div>
             
         <div class="col-sm-2" style="text-align: center; font-family: t;">Field Name</div>
             
@@ -127,7 +113,7 @@ function addMore() {
 
           <div class="col-sm-2" style="text-align: center; font-family: t;"><%= m.select "id",options_from_collection_for_select(FieldMaster.order("field_name ASC"), "id", "field_name"),{:include_blank=>"Select Option"},:class=>"form-control",:required=>"true", :style=>"height: 3.5rem;" %></div>
 
-          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:style=>"height: 3.5rem;",:class=>"form-control",:id=>"smcCompny",:required=>"",:include_blank=>"Select Option") %></div>
+          <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:field_type, options_for_select(['Text', 'Date', 'Dropdown'], selected: :field_type ),:style=>"height: 3.5rem;",:class=>"form-control",:id=>"country_drop",:required=>"",:include_blank=>"Select Option") %></div>
             
           <div class="col-sm-2" style="text-align: center; font-family: t;"><%= select_tag(:specification, options_for_select(['I', 'D', 'I/D'], selected: :specification ),:style=>"height: 3.5rem;",:class=>"form-control",:required=>"",:include_blank=>"Select Option")%></div>
  
@@ -203,9 +189,9 @@ function addMore() {
         
           <div class="modal-footer">
           
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i>Close</button>
           
-            <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>Add</button>
+            <button type="submit" class="btn btn-success"><i class="fa fa-check" aria-hidden="true"> </i>Add</button>
            
             <%end%>
         
@@ -253,7 +239,7 @@ function addMore() {
         
         <div class="modal-footer">
 
-          <a href="#" onclick="addMore();" class="btn btn-primary" style="color:white;"><i class="fa fa-plus fa-1x"></i> ADD</a>
+          <a href="#" onclick="addMore();" class="btn btn-success" style="color:white;"><i class="fa fa-check fa-1x"></i> &nbsb;&nbsb;ADD</a>
 
           <button type="submit" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Submit</button>
 
@@ -269,6 +255,7 @@ function addMore() {
   
   </div>
 
+
+ 
 </body>
 
-</html>

@@ -8,7 +8,8 @@ class SessionsController < ApplicationController
     user = User.where(:user_name=>params[:user_name], :password=>params[:password][0])
     unless user.empty?
       session[:user_id] = user[0].id
-      redirect_to users_user_dashboard_path, :success => "Successfully Logged in!"
+      flash[:success]= "Successfully Logged in!"
+      redirect_to users_user_dashboard_path
     else
 #      render "new"
       redirect_to root_url

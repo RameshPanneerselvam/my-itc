@@ -81,7 +81,8 @@ end
 
 
 def image_classification
-  
+  @classification=Classification.new
+  @image_exception=ImageException.new
   classification_id=Activity.where(:activity_name=>"classification").pluck(:id)[0]
   
     if params[:format].present?
@@ -126,10 +127,23 @@ end
 
 
 def classification_update
+classification_id=Activity.where(:activity_name=>"classification").pluck(:id)[0].to_i
   user_id=current_user.id
   Imagecurrentstatus.grouping_process(params,user_id)
-  flash[:notice] = "Successflly Classified."
+#  flash[:notice] = "Successflly Classified."
+if ProcessLog.where(:activity_id=>classification_id).where(:user_id=>current_user.id).where(:status=>nil).pluck(:process_specific_id).empty?
+ flash[:notice] = "Successflly Classified."
+  redirect_to users_user_dashboard_path
+else
   redirect_to :action=>"image_classification"
+end
+end
+  
+def skip_classification
+  user_id=current_user.id
+  classification_id=Activity.where(:activity_name=>"classification").pluck(:id)[0].to_i
+ImageException.skip_classification(params,classification_id,user_id) 
+redirect_to :action=>"image_classification"
 end
 
   def attribute_creation
@@ -265,7 +279,6 @@ def allocation_digitization
 end  
 
 def allocated_digitization
-  byebug
 f_id=params[:group]
 if f_id.nil?
  flash[:alert] = "Please select atleast one folder..."
@@ -450,7 +463,6 @@ def exception_details
     @issue_date=ImageException.where(:group_id=>Imagecurrentstatus.where(:image_id=>image.id).pluck(:group_id)[0]).pluck(:created_at)[0]
     @remark_name= RemarkMaster.where(:id=>ImageException.where(:group_id=>Imagecurrentstatus.where(:image_id=>image.id).pluck(:group_id)[0]).pluck(:remarks_id)[0]).pluck(:remark_name)[0]
     @reason=ImageException.where(:group_id=>Imagecurrentstatus.where(:image_id=>image.id).pluck(:group_id)[0]).pluck(:reason_for_exception)[0]
-    #@image_path=image.image_path
     @folder_name=Folder.where(:id=>Imagecurrentstatus.where(:image_id=>image.id).pluck(:folder_id)[0]).pluck(:folder_name)[0]
     @uploaded_date=Image.where(:id=>image.id).pluck(:created_at)[0]
     @exception << [@warehuse_name,@issue_date,@remark_name,@reason,image,@folder_name,@uploaded_date]

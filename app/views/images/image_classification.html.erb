@@ -6,7 +6,7 @@
   
         <%unless @all_image1 == []%>
   
-      <div class="panel-heading"><strong><center>Image Classification (<%=count=@all_image1.count%>)</center></strong></div>
+      <div class="panel-heading"><strong>Image Classification (<%=count=@all_image1.count%>)</strong> <button style="margin-left: 80%;" type="button" class="btn btn-default btn-sm font" data-toggle="modal" data-target="#myModal"><i class="fa fa-font-awesome" aria-hidden="true"></i> New classification</button></div>
                         
         <div class="panel-body">
         
@@ -45,6 +45,8 @@
 
                     <thead>
 
+                      <th style="text-align: center;"><b>Want to skip?</b></th>
+  
                       <th style="text-align: center;"><b>Grouping</b></th>
 
                       <th style="text-align: center;"><b>Image Name</b></th>
@@ -65,7 +67,8 @@
                     <tr>              
                       
                       <%= fields_for 'images[]', img do |p| %>
-                      
+
+                        <td style="text-align: center;"><div class="col-sm-6"><a class="btn btn-default" data-toggle="modal" data-target="#applyModal1"><i class="fa fa-chevron-right" aria-hidden="true"></i> Skip</a></div></td>
                         <td style="text-align: center;"><%=p.check_box :group %></td>
                         <td style="text-align: center;"><%=img[:image_path] %></td>
                         <td style="text-align: center;" id="image<%=c%>" class="images<%=count%>"><%= image_tag img.image_path,:style=>"height:30px;width:30%;"%></td>
@@ -75,6 +78,121 @@
                       <%end%>
                     
                     </tr>
+
+
+            <div class="modal fade" id="applyModal1" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog_2">
+   
+                <div class="modal-content" style="margin-top: 180px;">
+      
+                  <div class="modal-header">
+      
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+      
+                    <h4 class="modal-title" id="myModalLabel">
+
+                      <div class="head_4">
+      
+                        <div style="font-size: 100%; font-family: times;">Reasion for skip</div>
+      
+                      </div>
+      
+                    </h4>
+     
+                  </div>
+
+                  <div class="modal-body">
+      
+                    <%= form_for @image_exception, :url=>{:controller=>"images", :action=>"skip_classification"} do|i|%>
+      
+                      <div class="section">
+      
+                        <%= i.label :remarks_id,:style=>"font-family: t;"%>
+                     
+                        <%= i.select "id",options_from_collection_for_select(RemarkMaster.order("remark_name ASC"), "id", "remark_name"),{:include_blank=>"Select Option"},:class=>"form-control", :style=>"height: 3.5rem;"%>
+                     
+                        <%= i.label :reason_for_exception,:style=>"font-family: t;"%>
+                    
+                        <%= i.text_area :reason_for_exception,:class=>"form-control",:id=>"input"%>
+      
+                      </div>
+
+                      <div class="section">
+                        <!--%= i.submit "Upload",:class=>"btn btn-success"%-->
+                        <%= button_tag(type: "submit", :class=> "btn btn-sucess" ) do %><i class="fa fa-arrow-up"></i> Register Remark<% end %>
+
+                       <a class="btn btn-success" data-toggle="modal" data-target="#applyModal2"><i class="fa fa-plus "></i> Add new remark</a>
+       
+                    <%end%>
+      
+      
+                      </div>
+           
+                      
+                  </div>
+      
+                </div>
+      
+              </div>
+    
+            </div>
+ 
+            <div class="modal fade" id="applyModal2" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog modal-dialog_2">
+   
+                <div class="modal-content" style="margin-top: 180px;">
+      
+                  <div class="modal-header">
+      
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+      
+                    <h4 class="modal-title" id="myModalLabel">
+
+                      <div class="head_4">
+      
+                        <div style="font-size: 100%; font-family: times;">Reasion for skip</div>
+      
+                      </div>
+      
+                    </h4>
+     
+                  </div>
+
+                  <div class="modal-body">
+      
+                    <%= form_for @image_exception, :url=>{:controller=>"images", :action=>"skip_classification",:format=>img} do|i|%>
+      
+                      <div class="section">
+      
+                        <%= i.label :remarks_id,:style=>"font-family: t;"%>
+                    
+                        <%= i.text_field :remarks_id,:class=>"form-control",:id=>"input"%>
+
+                        <%= i.label :reason_for_exception,:style=>"font-family: t;"%>
+   
+                        <%= i.text_area :reason_for_exception,:class=>"form-control",:id=>"input"%>
+      
+                      </div>
+
+                      <div class="section" align="center">
+       
+                        <!--%= i.submit "Upload",:class=>"btn btn-success"%-->
+
+                        <%= button_tag(type: "submit", :class=> "btn btn-sucess") do %><i class="fa fa-arrow-up"></i> Add remark & Register<% end %>
+                 
+                      </div>
+       
+                    <%end%>
+      
+                  </div>
+      
+                </div>
+       
+              </div>
+
+            </div>  
                   
                   <%end%>
                   
@@ -103,6 +221,61 @@
       </div>
 
   </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  
+        <div style="width: 400px;" class="modal-dialog" role="document">
+    
+          <div class="modal-content">
+      
+            <div class="modal-header">
+        
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        
+              <center><h4 class="modal-title font" id="myModalLabel">Create Category</h4></center>
+      
+            </div>
+      
+            <div class="modal-body">
+     
+              <%= form_for @classification,:url=>{:controller=>"images", :action=>"create_classification"} do|i|%>
+     
+              <table>
+
+                <tr>
+
+                  <td><%= i.label :classification_name,"Classification Name:" ,:class=> "font"%></td>
+
+                  <td><%=i.text_field :classification_name,:required=>"",:class=> "form-control font"%></td>
+
+                </tr>
+         
+                <tr>
+
+                  <td><%= i.label :classification_description,"Classification Description:",:class=> "font"%></td>
+            
+                  <td><%=i.text_field :classification_description,:required=>"",:class=> "form-control font"%></td>
+
+                </tr>
+
+              </table>  
+      
+            </div>
+      
+            <div class="modal-footer">
+        
+              <button type="button" class="btn btn-default font" data-dismiss="modal">Close</button>
+
+              <%=i.submit "Save",:class=>"btn btn-primary font",:onclick=>"myFunction()" %>
+     
+              <%end%>
+    
+            </div>
+    
+          </div>
+  
+        </div>
+ 
+      </div>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script>
 

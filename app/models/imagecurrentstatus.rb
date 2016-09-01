@@ -9,7 +9,7 @@ class Imagecurrentstatus
   field :isactive, type: String
   field :folder_id, type: Integer
 
-  def self.grouping_process(params,user_id)
+  def self.grouping_process(params,user_id) 
     images=params[:images].keys
       group_count=0
       parent_id=0

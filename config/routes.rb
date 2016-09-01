@@ -113,6 +113,10 @@ Rails.application.routes.draw do
 
   get 'images/sub_data'
     post 'images/sub_data'
+
+    get 'images/skip_classification'
+    post 'images/skip_classification'
+
   
   resources :images
   resources :users

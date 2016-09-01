@@ -13,11 +13,10 @@
 <thead>
 <th>Folder Name</th>	
 <th>Wait for Allocation (Classification)</th>
-<th>Classification Allocated</th>
+<th>Classification Allocated & incomplete</th>
 <th>Classification Completed</th>
 <th>Wait for Allocation (Digitization)</th>
-<th>Digitization Allocated</th>
-<th>Digitization Completed</th>
+<th>Digitization incomplete</th>
 </thead>	
 <%@branch_folder=Folder.where(:branch_id=>$branch_id).pluck(:id)%>
 <%@branch_folder.map do |jj|%>
@@ -31,9 +30,6 @@
 <%group2=Imagecurrentstatus.where(:image_status=>1).where(:allocation_status=>1).where(:folder_id=>jj).pluck(:group_id)%>
 <%group2=group2&group2%>
 <%@count5=group2.count%>
-<%group3=Imagecurrentstatus.where(:image_status=>2).where(:allocation_status=>0).where(:folder_id=>jj).pluck(:group_id)%>
-<%group3=group3&group3%>
-<%@count6=group3.count%>
 <% unless @count1==0 && @count2==0 && @count3==0 && @count4==0 && @count5==0 %>
 <tbody>
 <tr>
@@ -43,7 +39,6 @@
 <td><%=@count3%></td>
 <td><%=@count4%></td>
 <td><%=@count5%></td>
-<td><%=@count6%></td>
 </tr>
 </tbody>
 <%end%>

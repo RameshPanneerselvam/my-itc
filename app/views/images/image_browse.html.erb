@@ -16,7 +16,7 @@
 
         <a style="margin-left:60%;" class="btn btn-success" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-plus"></i> New Folder</a>
       </div>
-      <div aria-expanded="true" style="width: 20%; margin-left: auto; border: 1px solid rgb(51, 122, 183);" class="pull-xs-right collapse" id="collapseExample">
+      <div aria-expanded="true" style="width: 25%; margin-left: auto; border: 1px solid rgb(51, 122, 183);" class="pull-xs-right collapse" id="collapseExample">
       
   <div class="card card-block">
     <%= form_for Folder.new,:url=>{:controller=>"images",:action=>"create_folder"} do |i|%>
@@ -24,7 +24,7 @@
             <div class="section">
       
                     
-              <%= i.text_field :folder_name,:value => "New Folder",:class=>"form-control",:autofocuse=>true ,:required=>true%>
+              <%= i.text_field :folder_name,:value => Time.now.to_s,:class=>"form-control",:autofocuse=>true ,:required=>true%>
       
             </div>
       <br>
